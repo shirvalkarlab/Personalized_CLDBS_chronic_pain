@@ -62,9 +62,12 @@ Figure 5 d/e; feeds `plot_figure5_adaptive_dbs.m`).
 ### figure5_processed_ambulatory_decoding/
 Processed ambulatory pain-decoding data for the Figure 5 a–c example participant
 (P1 only): `P1_neural_spectra.xlsx` (survey-locked power spectra, rows =
-surveys, columns = frequency in Hz), `P1_pain_surveys.xlsx` (the matched pain
-scores, with `MPQ` and `VAS` columns), and `P1_pain_decoding_AUC.xlsx`
-(high-versus-low-pain decoding area under the ROC curve per frequency bin). Only
+surveys, columns = frequency in Hz), `P1_pain_surveys.xlsx` (every survey paired
+with a recording, plotted in panel a, with `time`, `MPQ`, `VAS` and
+`in_analysis`; the spectra rows are the `in_analysis` surveys, in the same
+order, which remain after outlier removal and are used in panels b–c), and `P1_pain_decoding_AUC.xlsx`
+(leave-one-out decoding area under the ROC curve per frequency bin, MPQ at or
+above its mean versus below, all analysis surveys). Only
 P1 ships here because Figure 5 a–c shows P1 as the worked example; the ambulatory
 decoding inputs for the other participants are provided in a different form under
 `neural_features/` and `neural_data/ambulatory_stages123/` (which drive

@@ -401,16 +401,16 @@ def leave_one_out_auc(Feature, Label):
     fpr, tpr, _ = metrics.roc_curve(Label >= np.mean(Label), LDAOutput)
     return np.trapz(y=tpr, x=fpr)
 
-def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5, pain_percentile=[30,70]):
+def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5):
     """
     Compute AUC across frequencies using leave-one-out cross-validated LDA.
+    Every survey is used; the label is pain at or above the mean (see leave_one_out_auc).
 
     Inputs:
         neural_spectra : DataFrame (surveys x frequencies)
                          Columns must be numeric frequency values
         pain_scores    : 1D array of pain scores (length = number of surveys)
         freq_window    : Half-width (Hz) of frequency band to average (default=2.5, a 5 Hz band)
-        pain_percentile: list [low, high] percentile for selecting low/high pain (default [30,70])
 
     Output:
         AUC            : 1D array of AUC values (length = number of frequencies)
@@ -431,21 +431,12 @@ def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5, pain_per
         # Feature = mean PSD across selected band
         FeatureValue = neural_spectra.loc[:, freq_mask].mean(axis=1).values.reshape(-1, 1)
 
-        # Include only low & high pain trials
-        selection = (
-            rangeSelection(pain_scores, [0, np.percentile(pain_scores, pain_percentile[0])], type="inclusive")
-            | rangeSelection(pain_scores, [np.percentile(pain_scores, pain_percentile[1]), 200], type="inclusive")
-        )
-
-        FeatureValue_Limit = FeatureValue[selection, :]
-        Pain_Limit         = pain_scores[selection]
-
         # Compute AUC for this frequency
-        AUC[f] = leave_one_out_auc(FeatureValue_Limit, Pain_Limit)
+        AUC[f] = leave_one_out_auc(FeatureValue, pain_scores)
 
     return AUC
 
-def compute_first_peak_band(neural_spectra, AUC, i_low, i_high, tstat_window=2, smooth_window=5, peak_max_freq=50):
+def compute_first_peak_band(neural_spectra, AUC, i_low, i_high, tstat_window=2, smooth_window=5, peak_max_freq=40):
     """
     Identify the peak frequency from PSD statistics, compute the band-averaged PSD for that peak,
     and run a t-test comparing high vs low pain.
@@ -457,7 +448,7 @@ def compute_first_peak_band(neural_spectra, AUC, i_low, i_high, tstat_window=2, 
         AUC            : array of AUC values per frequency
         tstat_window   : window size for PSD statistic (default=2)
         smooth_window  : smoothing window for peak detection (default=5)
-        peak_max_freq  : maximum frequency to consider for peaks (default=50 Hz)
+        peak_max_freq  : peaks must lie below this frequency (default=40 Hz)
 
     Outputs:
         first_band         : array of mean PSD values at the first peak band (all trials)
@@ -511,10 +502,10 @@ def compute_first_peak_band(neural_spectra, AUC, i_low, i_high, tstat_window=2, 
     return first_band, first_peak_freq, FirstPeakPValue
 
 def auc_permutation_test(neural_spectra, pain_scores, center_freq, freq_window=2.5,
-                         pain_percentile=[30,70], n_permutations=1000, seed=0):
+                         n_permutations=1000, seed=0):
     """
-    Significance of the leave-one-out LDA AUC at one frequency band, against
-    AUCs from randomly permuted pain scores.
+    Significance of the leave-one-out LDA AUC at one frequency band (all surveys,
+    as in sliding_frequency_auc), against AUCs from randomly permuted pain scores.
 
     Outputs:
         true_auc : AUC with the real pain scores
@@ -523,11 +514,7 @@ def auc_permutation_test(neural_spectra, pain_scores, center_freq, freq_window=2
     freq_vals = np.array(neural_spectra.columns.astype(float))
     freq_mask = rangeSelection(freq_vals, [center_freq - freq_window, center_freq + freq_window], type="inclusive")
     feature   = neural_spectra.loc[:, freq_mask].mean(axis=1).values.reshape(-1, 1)
-    selection = (
-        rangeSelection(pain_scores, [0, np.percentile(pain_scores, pain_percentile[0])], type="inclusive")
-        | rangeSelection(pain_scores, [np.percentile(pain_scores, pain_percentile[1]), 200], type="inclusive")
-    )
-    feature, labels = feature[selection, :], pain_scores[selection]
+    labels    = pain_scores
 
     true_auc = leave_one_out_auc(feature, labels)
     rng      = np.random.default_rng(seed)
