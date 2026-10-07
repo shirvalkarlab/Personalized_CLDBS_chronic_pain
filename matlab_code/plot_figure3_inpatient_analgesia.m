@@ -38,11 +38,20 @@ metric_name = 'change_painVAS';
 % to be considered as permanent targets; they are the regions the figure
 % marks with a statistical comparison against sham.
 regions_by_participant = struct( ...
-    'P1', ["L VCVS", "R VPN",     "R ACC"], ...
+    'P1', ["L VCVS", "R VPThal",  "R ACC"], ...
     'P2', ["L Caudate", "R CMThal", "R ACC"], ...
     'P3', ["L Caudate", "R CMThal"], ...
     'P4', ["L ACC", "R CMThal"], ...
     'P5', ["L GPi", "R CMThal"]);
+
+% Some workbook sheets spell regions differently from the manuscript. Every
+% region is renamed to its manuscript name (right) as each sheet is read, so the
+% tested regions above, the boxes and the axis labels all refer to one name.
+manuscript_region_names = containers.Map( ...
+    {'LeftCaudate', 'LeftACC', 'RightACC', 'RightCMThal', 'R VPN', 'L VPL', ...
+     'R CMPf', 'L Motor', 'R Motor'}, ...
+    {'L Caudate', 'L ACC', 'R ACC', 'R CMThal', 'R VPThal', 'L VPThal', ...
+     'R CMThal', 'L M1', 'R M1'});
 
 participant_labels = fieldnames(analgesia_data);
 number_of_panels   = numel(participant_labels);
@@ -59,6 +68,8 @@ statistics_table = table();
 for panel_index = 1:number_of_panels
     participant_label = participant_labels{panel_index};
     patient_table     = analgesia_data.(participant_label);
+    patient_table.target = rename_regions(string(patient_table.target), ...
+                                          manuscript_region_names);
 
     nexttile();
     hold("on");
@@ -189,21 +200,10 @@ number_of_groups = numel(region_order);
 region_labels    = string(patient_table.target);
 values           = patient_table.(metric_name);
 
-% Region names as printed in the manuscript figure (data names on the left).
-display_names = containers.Map( ...
-    {'LeftCaudate', 'LeftACC', 'RightACC', 'RightCMThal', 'R VPN', 'L VPL', ...
-     'R CMPf', 'L Motor', 'R Motor'}, ...
-    {'L Caudate', 'L ACC', 'R ACC', 'R CMThal', 'R VPThal', 'L VPThal', ...
-     'R CMThal', 'L M1', 'R M1'});
-
 new_labels = cell(1, number_of_groups);
 for region_index = 1:number_of_groups
     n_valid = sum(~isnan(values(region_labels == string(region_order{region_index}))));
-    region_name = region_order{region_index};
-    if isKey(display_names, region_name)
-        region_name = display_names(region_name);
-    end
-    new_labels{region_index} = sprintf('%s (%d)', region_name, n_valid);
+    new_labels{region_index} = sprintf('%s (%d)', region_order{region_index}, n_valid);
 end
 
 current_axes = gca;
@@ -213,4 +213,15 @@ xtickangle(current_axes, 30);
 
 set(current_axes, 'TickLength', [0 0], 'TickDir', 'out', 'Box', 'off', 'FontSize', 9);
 ylabel(participant_label, 'FontWeight', 'bold', 'FontSize', 11);
+end
+
+
+function region_names = rename_regions(region_names, manuscript_region_names)
+% Replace each workbook region name that has a manuscript name; leave the rest.
+for name_index = 1:numel(region_names)
+    workbook_name = char(region_names(name_index));
+    if isKey(manuscript_region_names, workbook_name)
+        region_names(name_index) = manuscript_region_names(workbook_name);
+    end
+end
 end

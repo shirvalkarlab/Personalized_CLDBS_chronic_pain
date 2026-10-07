@@ -28,7 +28,7 @@ separate spreadsheet.
 Inpatient acute analgesia by stimulation target (feeds
 `plot_figure3_inpatient_analgesia.m`); one sheet per participant, `P1` through
 `P6`.
-- `target` — stimulated brain region (bipolar contact site), or `PRETRIAL` / `SHAM` for the baseline and sham trials.
+- `target` — stimulated brain region (bipolar contact site), or `PRETRIAL` / `SHAM` for the baseline and sham trials. Some sheets spell a region differently from the manuscript (for example `LeftCaudate` for L Caudate, `RightCMThal` for R CMThal, `R VPN` for R VPThal); the plotting function maps each to its manuscript name.
 - `change_painVAS` — change in pain VAS from that stimulation's own pre-stimulation baseline (negative = analgesia).
 
 ### figure4_processed_inpatient_pain_decoding/

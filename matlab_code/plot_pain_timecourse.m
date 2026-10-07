@@ -326,11 +326,10 @@ for row = 1:numel(participants)
             "filled", "MarkerFaceAlpha", point_alpha);
     draw_trend(axis_base, base_days, base_values, baseline_smooth_span, ...
                gap_break_days, trend_color, trend_alpha);
-    % Participant label to the far left of each row (shared y label added once
-    % at the layout level after the loop, so they do not collide).
-    text(axis_base, -0.92, 0.5, participant, "Units", "normalized", ...
-         "HorizontalAlignment", "center", "FontWeight", "bold", ...
-         "Rotation", 90, "FontSize", configuration.figure_font_size + 1);
+    % Participant label as the row's y label, so the layout reserves room for
+    % it and places the shared y label (added after the loop) further left.
+    ylabel(axis_base, participant, "FontWeight", "bold", ...
+           "FontSize", configuration.figure_font_size + 1);
     ylim(axis_base, [0, y_maximum]);
     if ~isempty(base_days)
         xlim(axis_base, [min(base_days) - 2, max(base_days) + 2]);
@@ -497,16 +496,10 @@ for row = 1:numel(participants)
 end
 
 title(layout, figure_title);
-% The shared y label is drawn in figure coordinates rather than with
-% ylabel(layout, ...), which centres it vertically on the whole stack and so
-% collides with the middle row's bold participant label. The fixed x sits just
-% left of the participant labels: far enough out to clear them, close enough in
-% that the label reads as belonging to the axes rather than stranded at the
-% figure edge.
-annotation(figure_handle, "textbox", [0.013, 0.35, 0.03, 0.30], ...
-           "String", y_label, "Rotation", 90, "EdgeColor", "none", ...
-           "HorizontalAlignment", "center", "VerticalAlignment", "middle", ...
-           "FontSize", configuration.figure_font_size + 1);
+% The shared y label belongs to the layout, which places it left of the
+% participant labels. A figure annotation would be left out of the exported
+% file by R2024b.
+ylabel(layout, y_label, "FontSize", configuration.figure_font_size + 1);
 draw_condition_legend(layout, first_chronic_axis, open_loop_color, ...
                       closed_loop_color, crossover_color, washout_color, ...
                       sham_edge_color);
@@ -522,8 +515,13 @@ exportgraphics(figure_handle, output_png, "Resolution", 200);
 % SVG for figure editors: every string stays a <text> element, so titles,
 % labels and annotations remain selectable and editable rather than outlined
 % into paths.
+% exportgraphics writes SVG only from R2025a, so earlier releases use print.
 output_svg = fullfile(configuration.figure_directory, output_basename + ".svg");
-exportgraphics(figure_handle, output_svg, "ContentType", "vector");
+if isMATLABReleaseOlderThan("R2025a")
+    print(figure_handle, output_svg, "-dsvg", "-vector");
+else
+    exportgraphics(figure_handle, output_svg, "ContentType", "vector");
+end
 end
 
 

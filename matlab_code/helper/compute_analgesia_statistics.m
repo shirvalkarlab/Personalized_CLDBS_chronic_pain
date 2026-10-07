@@ -65,7 +65,8 @@ for region_index = 1:numel(target_regions_of_interest)
     region_position = find(group_labels == this_region);
     sham_position   = find(group_labels == "SHAM");
     if ~isempty(region_position) && ~isempty(sham_position)
-        significance_stars([region_position, sham_position], p_value);
+        significance_stars([region_position, sham_position], p_value, ...
+                           max(region_values));
     end
 end
 
