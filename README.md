@@ -102,7 +102,7 @@ docs/                   Figure inventory and data dictionary
 
 ## Software requirements
 
-**MATLAB.** R2024b or newer (tested on R2024b Update 4). The base product plus the
+**MATLAB.** R2024b or newer (tested on R2024b Update 4 and R2026a Update 3). The base product plus the
 Statistics and Machine Learning Toolbox (for `fitlme`, `ranksum`, `bootci`) are sufficient.
 
 **Python.** Python 3.10 or 3.11 (the pinned SciPy does not install on 3.12), with dependencies pinned in
