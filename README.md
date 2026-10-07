@@ -218,6 +218,11 @@ Every Python-generated figure, its script, and the data it reads:
 | S6 | `plot_figureS6_battery_efficiency.py` | `figureS6_battery_efficiency/{discharge_segments,breakeven_duty}.csv` |
 | S8 | `stability_and_closed_loop/analyze_ambulatory_biomarker_stability.py` | `neural_data/ambulatory_stages123/*.h5` |
 
+The Figure 5b AUC is trained and tested on the surveys at or below the 30th or at
+or above the 70th pain percentile. To use every survey instead, set
+`AUC_TRAINING_SET = "all"` in `shared_utilities/utility/SignalProcessingUtility.py`
+and rerun both Figure 5 notebooks; the selected band is 7.5 Hz either way.
+
 Three scripts produce tabular results rather than figures:
 
 | Output | Script | Input in `data/` |

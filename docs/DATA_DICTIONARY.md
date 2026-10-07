@@ -66,8 +66,9 @@ surveys, columns = frequency in Hz), `P1_pain_surveys.xlsx` (every survey paired
 with a recording, plotted in panel a, with `time`, `MPQ`, `VAS` and
 `in_analysis`; the spectra rows are the `in_analysis` surveys, in the same
 order, which remain after outlier removal and are used in panels b–c), and `P1_pain_decoding_AUC.xlsx`
-(leave-one-out decoding area under the ROC curve per frequency bin, MPQ at or
-above its mean versus below, all analysis surveys). Only
+(leave-one-out decoding area under the ROC curve per frequency bin, high versus
+low pain on the 724 analysis surveys at or above the 70th or at or below the 30th
+MPQ percentile). Only
 P1 ships here because Figure 5 a–c shows P1 as the worked example; the ambulatory
 decoding inputs for the other participants are provided in a different form under
 `neural_features/` and `neural_data/ambulatory_stages123/` (which drive

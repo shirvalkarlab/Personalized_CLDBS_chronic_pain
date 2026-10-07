@@ -401,16 +401,37 @@ def leave_one_out_auc(Feature, Label):
     fpr, tpr, _ = metrics.roc_curve(Label >= np.mean(Label), LDAOutput)
     return np.trapz(y=tpr, x=fpr)
 
-def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5):
+# Surveys used to train and test the Figure 5b AUC (and its permutation test):
+#   "high_low" : only surveys at or below the 30th or at or above the 70th pain percentile (default)
+#   "all"      : every survey, labelled high when pain is at or above the mean
+AUC_TRAINING_SET = "high_low"
+
+def auc_training_surveys(pain_scores, training_set=None, pain_percentile=(30, 70)):
     """
-    Compute AUC across frequencies using leave-one-out cross-validated LDA.
-    Every survey is used; the label is pain at or above the mean (see leave_one_out_auc).
+    Boolean mask of the surveys used for the AUC (see AUC_TRAINING_SET).
+    Within the high/low surveys the mean split in leave_one_out_auc separates
+    the two groups exactly, so the label is high versus low pain.
+    """
+    training_set = AUC_TRAINING_SET if training_set is None else training_set
+    pain_scores  = np.asarray(pain_scores, dtype=float)
+    if training_set == "all":
+        return np.ones(len(pain_scores), dtype=bool)
+    if training_set == "high_low":
+        return ((pain_scores <= np.percentile(pain_scores, pain_percentile[0])) |
+                (pain_scores >= np.percentile(pain_scores, pain_percentile[1])))
+    raise ValueError(f'training_set must be "high_low" or "all", not {training_set!r}')
+
+def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5, training_set=None):
+    """
+    Compute AUC across frequencies using leave-one-out cross-validated LDA,
+    on the surveys selected by auc_training_surveys (default AUC_TRAINING_SET).
 
     Inputs:
         neural_spectra : DataFrame (surveys x frequencies)
                          Columns must be numeric frequency values
         pain_scores    : 1D array of pain scores (length = number of surveys)
         freq_window    : Half-width (Hz) of frequency band to average (default=2.5, a 5 Hz band)
+        training_set   : "high_low" or "all" (default None = AUC_TRAINING_SET)
 
     Output:
         AUC            : 1D array of AUC values (length = number of frequencies)
@@ -419,6 +440,9 @@ def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5):
     # --- Prepare frequency values ---
     freq_vals = np.array(neural_spectra.columns.astype(float))
     AUC       = np.zeros(len(freq_vals))
+    keep      = auc_training_surveys(pain_scores, training_set)
+    pain_kept = np.asarray(pain_scores)[keep]
+    print(f"AUC training surveys: {keep.sum()} of {len(keep)}")
 
     # --- Loop over frequencies ---
     for f, Freq in enumerate(freq_vals):
@@ -432,7 +456,7 @@ def sliding_frequency_auc(neural_spectra, pain_scores, freq_window=2.5):
         FeatureValue = neural_spectra.loc[:, freq_mask].mean(axis=1).values.reshape(-1, 1)
 
         # Compute AUC for this frequency
-        AUC[f] = leave_one_out_auc(FeatureValue, pain_scores)
+        AUC[f] = leave_one_out_auc(FeatureValue[keep], pain_kept)
 
     return AUC
 
@@ -502,10 +526,10 @@ def compute_first_peak_band(neural_spectra, AUC, i_low, i_high, tstat_window=2, 
     return first_band, first_peak_freq, FirstPeakPValue
 
 def auc_permutation_test(neural_spectra, pain_scores, center_freq, freq_window=2.5,
-                         n_permutations=1000, seed=0):
+                         n_permutations=1000, seed=0, training_set=None):
     """
-    Significance of the leave-one-out LDA AUC at one frequency band (all surveys,
-    as in sliding_frequency_auc), against AUCs from randomly permuted pain scores.
+    Significance of the leave-one-out LDA AUC at one frequency band (same surveys
+    as sliding_frequency_auc), against AUCs from randomly permuted pain scores.
 
     Outputs:
         true_auc : AUC with the real pain scores
@@ -513,8 +537,9 @@ def auc_permutation_test(neural_spectra, pain_scores, center_freq, freq_window=2
     """
     freq_vals = np.array(neural_spectra.columns.astype(float))
     freq_mask = rangeSelection(freq_vals, [center_freq - freq_window, center_freq + freq_window], type="inclusive")
-    feature   = neural_spectra.loc[:, freq_mask].mean(axis=1).values.reshape(-1, 1)
-    labels    = pain_scores
+    keep      = auc_training_surveys(pain_scores, training_set)
+    feature   = neural_spectra.loc[:, freq_mask].mean(axis=1).values.reshape(-1, 1)[keep]
+    labels    = np.asarray(pain_scores)[keep]
 
     true_auc = leave_one_out_auc(feature, labels)
     rng      = np.random.default_rng(seed)
