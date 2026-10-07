@@ -25,7 +25,7 @@ predict pain scores in the five participants (P1–P5).
 ## Script execution order
 
 Scripts 03, 05 and 06 run from the shipped results; 02 and 04 need the
-coefficient pickles written by 01, which are not shipped.
+model coefficient files, which 01 recreates.
 
 ```
 01_run_ml_pipeline.py
@@ -48,10 +48,9 @@ Runs LASSO regression and LDA classification with:
 **Inputs:** `neural_features/P{n}/*.csv` (neural features and pain labels;
 override the root with the `DECODING_FEATURES_ROOT` environment variable)
 **Outputs:** into `decoding_results/P{n}/` — `lasso_*.npy`, `lda_*.npy`, the
-coefficient pickles (`lasso_coef_df.pkl`, `lda_coef_df.pkl`), `count_dict.pkl`, and the
+model coefficient files and the
 sample counts `lda_num_samples_per_model.csv` and `regression_num_sample_per_model.csv`.
-01 also fits `mood_vas_s0`; it is not used by any figure. The coefficient pickles
-are not shipped, so 02 and 04 run only after 01.
+01 also fits `mood_vas_s0`; it is not used by any figure.
 
 ---
 
@@ -61,7 +60,7 @@ are not shipped, so 02 and 04 run only after 01.
 A model is significant when its score exceeds the 95th percentile of its permutation null.
 Computes p-values and feature-importance counts per electrode.
 
-**Inputs:** coefficient pickles and bootstrap distributions from step 01
+**Inputs:** model coefficient files and bootstrap distributions from step 01
 **Outputs:** `*_sig_*.npy`, `*_all_p_vals.npy`, `*_counts_ch_ordered.csv`
 
 ---
@@ -86,7 +85,7 @@ gamma) appears among the top features of the significant models, and draws those
 counts per participant and pooled across participants. This is a supporting
 analysis; it is not one of the numbered supplementary figures.
 
-**Inputs:** coefficient pickles and bootstrap distributions from step 01
+**Inputs:** model coefficient files and bootstrap distributions from step 01
 **Outputs:** into `decoding_results/P{n}/frequency_coefficient_figs/` —
 `P{n}_{lda,lasso,combined}_freq_counts.{pdf,png,csv}`, plus pooled figures in
 `combined_figures/` (set `COMBINED_FIG_DIR` to redirect)
