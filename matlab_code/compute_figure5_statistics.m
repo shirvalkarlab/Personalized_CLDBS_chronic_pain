@@ -1,7 +1,7 @@
-function figure6_statistics = compute_figure6_statistics(configuration)
-% COMPUTE_FIGURE6_STATISTICS  Mixed-effects test of closed-loop versus sham.
+function figure5_statistics = compute_figure5_statistics(configuration)
+% COMPUTE_FIGURE5_STATISTICS  Mixed-effects test of closed-loop versus sham.
 %
-%   figure6_statistics = COMPUTE_FIGURE6_STATISTICS(configuration) fits the
+%   figure5_statistics = COMPUTE_FIGURE5_STATISTICS(configuration) fits the
 %   pre-specified linear mixed-effects model comparing the closed-loop and
 %   sham conditions on the daily percent change from pre-trial baseline,
 %   once on the uniform numeric rating scale (mayoNRS) and once on each
@@ -28,17 +28,17 @@ function figure6_statistics = compute_figure6_statistics(configuration)
 %                        .data_directory and .index_metric.
 %
 %   OUTPUT
-%     figure6_statistics Struct with one field per outcome ('uniform_nrs',
+%     figure5_statistics Struct with one field per outcome ('uniform_nrs',
 %                        'index_metric'), each holding the fitted model, the
 %                        residual and Satterthwaite F tests, and the p-value
 %                        of the condition effect.
 %
 %   DATA
-%     data/figure6_double_blind_outcomes/cohort_daily_percent_change.csv, the
-%     per-day table that Figure 6a-c also plots.
+%     data/figure5_double_blind_outcomes/cohort_daily_percent_change.csv, the
+%     per-day table that Figure 5a-c also plots.
 
 data_file = fullfile(configuration.data_directory, ...
-    'figure6_double_blind_outcomes', 'cohort_daily_percent_change.csv');
+    'figure5_double_blind_outcomes', 'cohort_daily_percent_change.csv');
 daily_table = readtable(data_file, 'TextType', 'string');
 
 % ---- Keep only the closed-loop and sham conditions ---------------------
@@ -46,7 +46,7 @@ daily_table = daily_table(ismember(daily_table.stim_group, ["closed-loop", "sham
 
 % ---- Check: P3 has no sham condition -----------------------------------
 assert(~any(daily_table.patient_id == "P3" & daily_table.stim_group == "sham"), ...
-    'P3 sham rows found in the Figure 6 daily table; P3 has no sham condition.');
+    'P3 sham rows found in the Figure 5 daily table; P3 has no sham condition.');
 
 % ---- Index-metric outcome: each participant's own scale ----------------
 index_percent_change = nan(height(daily_table), 1);
@@ -65,7 +65,7 @@ daily_table.patient_id = categorical(daily_table.patient_id);
 outcome_names   = {'uniform_nrs', 'index_metric'};
 outcome_columns = {'baseline_percent_diff_mayoNRS', 'index_percent_change'};
 
-figure6_statistics = struct();
+figure5_statistics = struct();
 
 for outcome_index = 1:numel(outcome_names)
     outcome_name   = outcome_names{outcome_index};
@@ -96,7 +96,7 @@ for outcome_index = 1:numel(outcome_names)
     outcome_result.condition_p_value_satterthwaite = ...
         analysis_of_variance_satterthwaite.pValue(condition_row);
 
-    fprintf(['Figure 6, %s: %d closed-loop and %d sham participant-days; ' ...
+    fprintf(['Figure 5, %s: %d closed-loop and %d sham participant-days; ' ...
              'F(%d, %d) = %.2f, p = %.3f (Satterthwaite p = %.3f)\n'], ...
         outcome_name, sum(model_data.stim_group == "closed-loop"), ...
         sum(model_data.stim_group == "sham"), ...
@@ -104,7 +104,7 @@ for outcome_index = 1:numel(outcome_names)
         analysis_of_variance.FStat(condition_row), outcome_result.condition_p_value, ...
         outcome_result.condition_p_value_satterthwaite);
 
-    figure6_statistics.(outcome_name) = outcome_result;
+    figure5_statistics.(outcome_name) = outcome_result;
 end
 
 end

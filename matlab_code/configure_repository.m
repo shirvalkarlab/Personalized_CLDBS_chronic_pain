@@ -44,7 +44,7 @@ configuration.participants          = {'P1'; 'P2'; 'P3'; 'P4'; 'P5'; 'P6'};
 configuration.implanted_participants = {'P1'; 'P2'; 'P3'; 'P4'; 'P5'};
 
 % Each participant's prespecified index pain scale (trial analysis plan), used
-% by Figure 6, its statistics and Extended Data Table 2.
+% by Figure 5, its statistics and Extended Data Table 2.
 configuration.index_metric = struct('P1', "MPQtotal", 'P2', "mayoNRS", ...
     'P3', "MPQtotal", 'P4', "nocNRS", 'P5', "mayoNRS");
 

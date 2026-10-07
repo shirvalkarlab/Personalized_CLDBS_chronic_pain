@@ -2,7 +2,7 @@
 _ancillary_helpers.py
 ================================================================================
 Shared plotting + fitting helpers for the ancillary behavioral score figures
-(main Figure 6 d/e and Extended Figure 3 b/c).
+(main Figure 5 d/e and Extended Figure 4 b/c).
 
 Shared drawing helpers, so every box + swarm panel in this deposit renders with
 the same conventions:

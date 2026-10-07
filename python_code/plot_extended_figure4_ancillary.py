@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-plot_extended_figure3_ancillary.py
+plot_extended_figure4_ancillary.py
 ================================================================================
-Extended Figure 3 a + b + c: ancillary behavioral scores workflow and results.
+Extended Figure 4 a + b + c: ancillary behavioral scores workflow and results.
 
   a)  Construct-score schematic: how the raw questionnaires (SF-36 subscales,
       BDI, BAI, HamD-6) are oriented (higher = better; depression/anxiety
@@ -21,7 +21,7 @@ cohort panels through `_ancillary_helpers.py`, which also holds the statistics.
 Responder status is shown as MCID counts.
 
 INPUT   data/figure_ancillary_behavioral/ancillary_scores_long.csv
-OUTPUT  figures/FigureExtended3abc_ancillary_behavioral.pdf
+OUTPUT  figures/FigureExtended4abc_ancillary_behavioral.pdf
 """
 from __future__ import annotations
 
@@ -239,7 +239,7 @@ def main():
     ax_c.spines["top"].set_visible(False); ax_c.spines["right"].set_visible(False)
 
     os.makedirs(FIG_DIR, exist_ok=True)
-    out = os.path.join(FIG_DIR, "FigureExtended3abc_ancillary_behavioral.pdf")
+    out = os.path.join(FIG_DIR, "FigureExtended4abc_ancillary_behavioral.pdf")
     fig.savefig(out, format="pdf", bbox_inches="tight")
     plt.close(fig)
     print(f"\nWrote {out}")

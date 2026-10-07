@@ -10,7 +10,8 @@
 #
 # or use the helper: python setup_environment.py
 #
-# Only libraries actually imported by the code here are listed. Everything
+# Apart from the notebook tools at the end, only libraries imported by the
+# code here are listed. Everything
 # else (glob, os, json, math, datetime, pickle, subprocess, multiprocessing,
 # argparse, warnings, copy, random) is in the Python standard library.
 
@@ -26,3 +27,9 @@ mplcursors==0.7.1
 pytz==2026.2
 openpyxl==3.1.5
 python-docx==1.1.2
+
+# Runs the four Figure 3 and Figure 4 notebooks (interactively or with
+# jupyter nbconvert --to notebook --execute).
+jupyter==1.1.1
+nbconvert==7.17.1
+ipykernel==7.3.0

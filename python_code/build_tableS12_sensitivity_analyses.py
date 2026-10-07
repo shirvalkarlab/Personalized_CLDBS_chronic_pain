@@ -20,7 +20,7 @@ import statsmodels.formula.api as smf
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-INPUT_FILE = PROJECT_ROOT / "data" / "figure6_double_blind_outcomes" / "cohort_daily_percent_change.csv"
+INPUT_FILE = PROJECT_ROOT / "data" / "figure5_double_blind_outcomes" / "cohort_daily_percent_change.csv"
 OUTPUT_DIRECTORY = PROJECT_ROOT / "figures"
 
 PAIN_COLUMN = "baseline_percent_diff_mayoNRS"

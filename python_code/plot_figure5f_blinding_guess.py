@@ -1,5 +1,5 @@
 """
-Figure 6f: blinding assessment.
+Figure 5f: blinding assessment.
 
 Participants were asked to guess whether stimulation was on ("stim") or off
 ("sham") just before and after each program change, while both they and the
@@ -34,19 +34,19 @@ conditions that participant has, and not in tests 2 and 3, which require both
 conditions from the same participant.
 
 INPUT
-    data/figure6_double_blind_outcomes/double_blind_outcomes.xlsx, sheet
+    data/figure5_double_blind_outcomes/double_blind_outcomes.xlsx, sheet
     "stim_guess": one row per participant x ground truth x guess, with
     percent_guessed giving how often that participant gave that answer under
     that true condition.
 
 OUTPUT
-    figures/Figure6f_blinding_guess.pdf   editable vector, for figure assembly
-    figures/Figure6f_blinding_guess.svg   editable vector
-    figures/Figure6f_blinding_guess.png   300 dpi raster, for quick viewing
+    figures/Figure5f_blinding_guess.pdf   editable vector, for figure assembly
+    figures/Figure5f_blinding_guess.svg   editable vector
+    figures/Figure5f_blinding_guess.png   300 dpi raster, for quick viewing
     Test statistics are printed to the console.
 
 Usage:
-    python plot_figure6f_blinding_guess.py
+    python plot_figure5f_blinding_guess.py
 """
 
 import os
@@ -70,7 +70,7 @@ matplotlib.rcParams["svg.fonttype"] = "none"
 # siblings of it at the repository root.
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPOSITORY = os.path.abspath(os.path.join(HERE, os.pardir))
-GUESS_WORKBOOK = os.path.join(REPOSITORY, "data", "figure6_double_blind_outcomes",
+GUESS_WORKBOOK = os.path.join(REPOSITORY, "data", "figure5_double_blind_outcomes",
                               "double_blind_outcomes.xlsx")
 FIGURE_DIRECTORY = os.path.join(REPOSITORY, "figures")
 
@@ -186,7 +186,7 @@ def main():
     within_stim = test_truth_effect_within_guess(guesses, "stim")
     within_sham = test_truth_effect_within_guess(guesses, "sham")
 
-    print("Figure 6f: blinding assessment\n")
+    print("Figure 5f: blinding assessment\n")
     print("1. Main effect of guess (collapsed across true condition)")
     print(f'   guessed "stim" {main_effect["stim_mean"]:.0f} +/- {main_effect["stim_sem"]:.0f}%   '
           f'guessed "sham" {main_effect["sham_mean"]:.0f} +/- {main_effect["sham_sem"]:.0f}%')
@@ -203,7 +203,7 @@ def main():
     figure = plot_blinding_guess(guesses)
     os.makedirs(FIGURE_DIRECTORY, exist_ok=True)
     for extension in ("pdf", "svg", "png"):
-        output = os.path.join(FIGURE_DIRECTORY, f"Figure6f_blinding_guess.{extension}")
+        output = os.path.join(FIGURE_DIRECTORY, f"Figure5f_blinding_guess.{extension}")
         figure.savefig(output, dpi=300, bbox_inches="tight")
         print("wrote", output)
 

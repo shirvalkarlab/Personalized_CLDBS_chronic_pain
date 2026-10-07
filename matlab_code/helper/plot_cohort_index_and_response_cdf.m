@@ -1,5 +1,5 @@
 function figure_handle = plot_cohort_index_and_response_cdf(config, cohort_groups)
-% PLOT_COHORT_INDEX_AND_RESPONSE_CDF  Figure 6 panels a-c, closed-loop versus sham.
+% PLOT_COHORT_INDEX_AND_RESPONSE_CDF  Figure 5 panels a-c, closed-loop versus sham.
 %
 %   figure_handle = PLOT_COHORT_INDEX_AND_RESPONSE_CDF(config, cohort_groups)
 %   draws three panels:
@@ -26,7 +26,7 @@ function figure_handle = plot_cohort_index_and_response_cdf(config, cohort_group
 %                     and .figure_export_options.
 %     cohort_groups - per-observation table (one row per participant-day-
 %                     condition) read from
-%                     data/figure6_double_blind_outcomes/cohort_daily_percent_change.csv,
+%                     data/figure5_double_blind_outcomes/cohort_daily_percent_change.csv,
 %                     with columns patient_id, stim_group and
 %                     baseline_percent_diff_<metric>.
 %
@@ -105,7 +105,7 @@ function figure_handle = plot_cohort_index_and_response_cdf(config, cohort_group
     %% Save the figure as a PDF into the repository figures/ folder.
     figure_handle = fig;
     output_file = fullfile(config.figure_directory, ...
-        'Figure6_double_blind_outcomes.pdf');
+        'Figure5_double_blind_outcomes.pdf');
     if isfield(config, 'figure_export_options')
         exportgraphics(fig, output_file, config.figure_export_options{:});
     else
@@ -205,7 +205,7 @@ end
 % =========================================================================
 function draw_boxes(ax, groups, xpos, col)
 %DRAW_BOXES One IQR box + median per participant for a single condition.
-%   Shared cohort box look (Figure 6a,b): the summary box uses the pale grey
+%   Shared cohort box look (Figure 5a,b): the summary box uses the pale grey
 %   (sham) / pale
 %   blue (closed-loop) fill with a black outline (draw_summary_box), keyed off
 %   the condition colour COL. The condition is carried by the BOX fill; the

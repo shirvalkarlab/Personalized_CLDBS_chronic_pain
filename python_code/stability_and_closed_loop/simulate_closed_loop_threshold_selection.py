@@ -7,7 +7,7 @@ Supplementary Figure S4 — Closed-loop algorithm development and threshold
                           selection simulation.
 
 Code for:
-  "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized,
+  "Personalized closed-loop deep brain stimulation for chronic pain: a randomized,
    double-blind crossover pilot trial" (Shirvalkar et al., 2026, Nature Medicine).
 
 WHAT THIS SCRIPT DOES
@@ -32,7 +32,7 @@ INPUTS (edit the CONFIGURATION block below)
       Which participant hemisphere to analyse; it selects the per-hemisphere
       feature file under neural_data/ambulatory_stages123/. FEATURE_CHANNEL and
       FEATURE_BAND are set for P3L, the published example; another side needs
-      its own values (Extended Data Table 3).
+      its own values (Extended Data Table 1).
   RCS_DATA_ROOT / DEVICE
       Location of the Summit continuous bilateral streaming session folders for
       one device side. Each session folder contains a DeviceNPC* subfolder that

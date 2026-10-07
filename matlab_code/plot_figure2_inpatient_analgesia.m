@@ -1,9 +1,9 @@
 function [figure_handle, statistics_table] = ...
-        plot_figure3_inpatient_analgesia(configuration, analgesia_data)
-% PLOT_FIGURE3_INPATIENT_ANALGESIA  Pain relief by stimulation region.
+        plot_figure2_inpatient_analgesia(configuration, analgesia_data)
+% PLOT_FIGURE2_INPATIENT_ANALGESIA  Pain relief by stimulation region.
 %
 %   [figure_handle, statistics_table] =
-%   PLOT_FIGURE3_INPATIENT_ANALGESIA(configuration, analgesia_data) draws
+%   PLOT_FIGURE2_INPATIENT_ANALGESIA(configuration, analgesia_data) draws
 %   one stacked panel per participant showing the change in pain (visual
 %   analogue score) produced by stimulating each brain region during the
 %   inpatient stereo-EEG mapping trial, and tests each region against the
@@ -22,7 +22,7 @@ function [figure_handle, statistics_table] = ...
 %                      'target' (region name or 'SHAM') and 'change_painVAS'.
 %
 %   OUTPUT
-%     figure_handle     Handle to the created figure (saved as Figure3.pdf).
+%     figure_handle     Handle to the created figure (saved as Figure2.pdf).
 %     statistics_table  Table of rank-sum test results, one row per tested
 %                       region per participant.
 %
@@ -103,7 +103,7 @@ for panel_index = 1:number_of_panels
 end
 
 % ---- Save --------------------------------------------------------------
-output_file = fullfile(configuration.figure_directory, 'Figure3.pdf');
+output_file = fullfile(configuration.figure_directory, 'Figure2.pdf');
 exportgraphics(figure_handle, output_file, configuration.figure_export_options{:});
 
 end

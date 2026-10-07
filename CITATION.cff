@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code or data, please cite the paper below."
-title: "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial — code and data deposit"
+title: "Personalized closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial — code and data deposit"
 type: dataset
 authors:
   - family-names: Shirvalkar
@@ -54,7 +54,7 @@ keywords:
   - intracranial electrophysiology
 preferred-citation:
   type: article
-  title: "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial"
+  title: "Personalized closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial"
   authors:
     - family-names: Shirvalkar
       given-names: Prasad

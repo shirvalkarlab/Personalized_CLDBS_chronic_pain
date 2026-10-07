@@ -2,7 +2,7 @@ function draw_summary_box(ax, values, x_center, box_width, face_color)
 % DRAW_SUMMARY_BOX  Draw one interquartile box with median and whiskers.
 %
 %   DRAW_SUMMARY_BOX(ax, values, x_center, box_width, face_color) draws the
-%   box used in Figure 6a,b: a filled rectangle spanning the interquartile
+%   box used in Figure 5a,b: a filled rectangle spanning the interquartile
 %   range with a black outline, a black median line, and black whiskers to
 %   the furthest points within 1.5*IQR. No outlier markers are drawn (the raw
 %   values are shown as a swarm on top).

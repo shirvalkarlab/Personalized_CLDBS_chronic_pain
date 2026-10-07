@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-plot_figure6_ancillary_main.py
+plot_figure5_ancillary_main.py
 ================================================================================
-Main Figure 6 d + e: ancillary behavioral scores, baseline vs chronic.
+Main Figure 5 d + e: ancillary behavioral scores, baseline vs chronic.
 
   d)  SF-36 composite baseline vs chronic (per-survey box + patient swarm).
   e)  Symptom-domain forest (pain / function / mood) in SD units with 95% CI.
@@ -12,7 +12,7 @@ _ancillary_helpers.py). Refits the mixed models at run time from the
 long-format CSV.
 
 INPUT   data/figure_ancillary_behavioral/ancillary_scores_long.csv
-OUTPUT  figures/Figure6de_ancillary_behavioral_main.pdf
+OUTPUT  figures/Figure5de_ancillary_behavioral_main.pdf
         data/figure_ancillary_behavioral/{mixed_effects,construct_pooling}_reference.csv
 """
 from __future__ import annotations
@@ -124,7 +124,7 @@ def main():
         ax.spines["right"].set_visible(False)
 
     os.makedirs(FIG_DIR, exist_ok=True)
-    out = os.path.join(FIG_DIR, "Figure6de_ancillary_behavioral_main.pdf")
+    out = os.path.join(FIG_DIR, "Figure5de_ancillary_behavioral_main.pdf")
     fig.savefig(out, format="pdf", bbox_inches="tight")
     plt.close(fig)
     print(f"\nWrote {out}")

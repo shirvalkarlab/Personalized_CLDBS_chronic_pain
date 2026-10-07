@@ -1,7 +1,7 @@
 # Data dictionary
 
 Field-level description of every processed data file in this repository, for
-**Bespoke closed-loop deep brain stimulation for chronic pain: a randomized,
+**Personalized closed-loop deep brain stimulation for chronic pain: a randomized,
 double-blind crossover pilot trial** (Shirvalkar et al.). Participants are labelled **P1–P6**
 throughout; no device serial numbers or other identifying information are used.
 Pain-scale abbreviations retained as data labels: NRS (numeric rating scale),
@@ -20,47 +20,47 @@ Figure and table numbers here are the published numbering used in the article.
 
 ### Figure 1 timeline
 Main Figure 1 (P3 pain-intensity VAS) is drawn by the same plotter as Extended
-Data Figure 1 (`plot_pain_timecourse.m`) and reads the authoritative per-survey
+Data Figure 2 (`plot_pain_timecourse.m`) and reads the authoritative per-survey
 table `extended_figures_raw_pain/pain_surveys.csv` (documented below), not a
 separate spreadsheet.
 
-### figure3_inpatient_analgesia.xlsx
+### figure2_inpatient_analgesia.xlsx
 Inpatient acute analgesia by stimulation target (feeds
-`plot_figure3_inpatient_analgesia.m`); one sheet per participant, `P1` through
+`plot_figure2_inpatient_analgesia.m`); one sheet per participant, `P1` through
 `P6`.
 - `target` — stimulated brain region (bipolar contact site), or `PRETRIAL` / `SHAM` for the baseline and sham trials. Some sheets spell a region differently from the manuscript (for example `LeftCaudate` for L Caudate, `RightCMThal` for R CMThal, `R VPN` for R VPThal); the plotting function maps each to its manuscript name.
 - `change_painVAS` — change in pain VAS from that stimulation's own pre-stimulation baseline (negative = analgesia).
 
-### figure4_processed_inpatient_pain_decoding/
-Processed inpatient pain-decoding results for Figure 4 b–d, nine spreadsheets per
+### figure3_processed_inpatient_pain_decoding/
+Processed inpatient pain-decoding results for Figure 3 b–d, nine spreadsheets per
 participant for P1–P5 (45 files). Read by
-`plot_figure4bcd_inpatient_pain_decoding.ipynb`.
-`process_figure4bcd_inpatient_pain_decoding.ipynb` adds significance columns to the
+`plot_figure3bcd_inpatient_pain_decoding.ipynb`.
+`process_figure3bcd_inpatient_pain_decoding.ipynb` adds significance columns to the
 two `_across_models.xlsx` files and writes `_inpatient_feature_counts.xlsx`; the other
 six files per participant are provided as data.
 
 - `P#_lasso_across_models.xlsx`, `P#_lasso_bootstrap_distribution.xlsx`,
   `P#_lasso_predicted_values_per_model.xlsx` — LASSO regression performance
   across candidate models, its bootstrap null distribution, and the per-model
-  predicted values (Figure 4b).
+  predicted values (Figure 3b).
 - `P#_lda_across_models.xlsx`, `P#_lda_bootstrap_distribution.xlsx`,
   `P#_LDA_ROCs_per_model.xlsx` — the same three products for the
-  linear-discriminant classifier, including the per-model ROC curves (Figure 4c).
+  linear-discriminant classifier, including the per-model ROC curves (Figure 3c).
 - `P#_feature_names.xlsx`, `P#_electrode_labels.xlsx` — the feature and recording
   contact labels that index the model outputs.
 - `P#_inpatient_feature_counts.xlsx` — decoding feature counts by anatomy;
-  Figure 4d shows P3.
+  Figure 3d shows P3.
   - `anatomy` — sensing region.
   - `count_lda`, `count_lasso`, `count_combined` — number of selected decoding features from the linear-discriminant model, the LASSO model, and their combination.
 
-### figure5_adaptive_dbs_performance.xlsx
+### figure4_adaptive_dbs_performance.xlsx
 Adaptive-DBS performance traces for participant P3's left hemisphere (main
-Figure 5 d/e; feeds `plot_figure5_adaptive_dbs.m`).
+Figure 4 d/e; feeds `plot_figure4_adaptive_dbs.m`).
 - `[aDBS_spon_tbl]` `time`, `on_off`, `state`, `ampInMilliamps` — timestamp, therapy on/off, adaptive detector state, and delivered stimulation amplitude (mA). Drives panel e (effective duty cycle and state raster).
 - `[LD_tbl]` `time`, `LD_output` — linear-discriminant detector output over time. Drives panel d (control signal with its two decision thresholds).
 
-### figure5_processed_ambulatory_decoding/
-Processed ambulatory pain-decoding data for the Figure 5 a–c example participant
+### figure4_processed_ambulatory_decoding/
+Processed ambulatory pain-decoding data for the Figure 4 a–c example participant
 (P1 only): `P1_neural_spectra.xlsx` (survey-locked power spectra, rows =
 surveys, columns = frequency in Hz), `P1_pain_surveys.xlsx` (every survey paired
 with a recording, plotted in panel a, with `time`, `MPQ`, `VAS` and
@@ -69,12 +69,12 @@ order, which remain after outlier removal and are used in panels b–c), and `P1
 (leave-one-out decoding area under the ROC curve per frequency bin, high versus
 low pain on the 724 analysis surveys at or above the 70th or at or below the 30th
 MPQ percentile). Only
-P1 ships here because Figure 5 a–c shows P1 as the worked example; the ambulatory
+P1 ships here because Figure 4 a–c shows P1 as the worked example; the ambulatory
 decoding inputs for the other participants are provided in a different form under
 `neural_features/` and `neural_data/ambulatory_stages123/` (which drive
 Supplementary Figures S8 and S4), not in this folder — so the absence of P2–P5
 files here is by design, not missing data. `P1_pain_decoding_AUC.xlsx` is written by
-`process_figure5_ambulatory_pain_decoding.ipynb` from the other two files.
+`process_figure4_ambulatory_pain_decoding.ipynb` from the other two files.
 
 ### figureS6_battery_efficiency/ (CSV extracts)
 Device energy accounting for Figure S6. The Python script
@@ -91,29 +91,29 @@ Each of the figures below reads a de-identified data extract in CSV or HDF5
 form, so every script runs from this deposit alone. The extracts are documented
 field by field in the sections that follow.
 
-### figure6_double_blind_outcomes/
-Ambulatory double-blind closed-loop-versus-sham outcomes (main Figure 6 a–c).
+### figure5_double_blind_outcomes/
+Ambulatory double-blind closed-loop-versus-sham outcomes (main Figure 5 a–c).
 Two products: the per-day percent-change CSV that draws the panels and feeds
-the statistics, and a workbook whose `stim_guess` sheet feeds Figure 6f.
+the statistics, and a workbook whose `stim_guess` sheet feeds Figure 5f.
 
 **`cohort_daily_percent_change.csv`** — per-participant daily percent-change
 values for every ambulatory outcome measure, split by stimulation condition
-(feeds `plot_figure6_double_blind_outcomes.m`, which draws the uniform
+(feeds `plot_figure5_double_blind_outcomes.m`, which draws the uniform
 numeric-rating-scale, index-metric and response-curve panels, and
-`compute_figure6_statistics.m`, which fits the closed-loop-versus-sham model).
+`compute_figure5_statistics.m`, which fits the closed-loop-versus-sham model).
 - `patient_id` — de-identified participant label (P1–P5).
 - `stim_group`, `stim_group_long` — stimulation condition: `pre-trial`, `closed-loop`, `sham`, `intermittent-loop`, `continuous-open-loop` or `active control` (short and long labels).
 - `baseline_percent_diff_<measure>` — percent change from that participant's pre-trial baseline for each measure: pain numeric-rating and visual-analog scales (`mayoNRS`, `painVAS`, `worstNRS`, `worstVAS`, neuropathic/nociceptive `np*`/`noc*`, regional `left*NRS`), the McGill Pain Questionnaire total (`MPQtotal`), Fitbit step total (`FB_StepTotal`), and mood/function instruments (`HamD6`, `PROMISPainInterference`, `PCGIS`).
 
 Each participant's prospective index metric is not a column in this file; it is
-declared in `plot_figure6_double_blind_outcomes.m`, which names the
+declared in `plot_figure5_double_blind_outcomes.m`, which names the
 `baseline_percent_diff_*` column to use for each of P1–P5.
 
 **`double_blind_outcomes.xlsx`** — summary workbook with three sheets; only
 `stim_guess` is read by the code:
 - `[summary]` `stim_group`, `mean_pain`, `SEM_pain_sem` — group mean pain and its standard error. Not read by the code.
 - `[daily]` `pt_id`, `stim_group`, `pain`, `steps`, `duty cycle` — per-participant daily pain, Fitbit step count, and closed-loop duty cycle, by stimulation group (closed-loop, sham, and 46 P3 washout (0 mA) rows). Not read by the code; the model reads `cohort_daily_percent_change.csv`.
-- `[stim_guess]` `pt_id`, `ground_truth`, `pt_guess`, `percent_guessed` — how often each participant guessed each condition during the blinded period. Plotted by `python_code/plot_figure6f_blinding_guess.py` (Figure 6f), which also runs the blinding tests.
+- `[stim_guess]` `pt_id`, `ground_truth`, `pt_guess`, `percent_guessed` — how often each participant guessed each condition during the blinded period. Plotted by `python_code/plot_figure5f_blinding_guess.py` (Figure 5f), which also runs the blinding tests.
 
 ### figureS7_acute_predicts_chronic/
 Paired acute-versus-chronic percent changes tested in Figure S7 (feeds
@@ -186,9 +186,9 @@ which refits the drain model from these tables).
 ### figure_ancillary_behavioral/
 
 Baseline (Stage 0 research visits) vs chronic on-therapy ancillary behavioral
-questionnaire scores. Feeds both `python_code/plot_figure6_ancillary_main.py`
-(main Figure 6 d/e) and `python_code/plot_extended_figure3_ancillary.py`
-(Extended Data Figure 3 a/b/c).
+questionnaire scores. Feeds both `python_code/plot_figure5_ancillary_main.py`
+(main Figure 5 d/e) and `python_code/plot_extended_figure4_ancillary.py`
+(Extended Data Figure 4 a/b/c).
 
 This CSV is the raw ancillary-score data (one row per completed survey) and is
 the source both plotters read. Baseline rows were assembled from the study's
@@ -220,13 +220,13 @@ counts) directly from this long CSV at run time.
 - `mixed_effects_reference.csv` — per-measure mixed-effects results (columns:
   measure, direction, coef, ci_lo, ci_hi, p, n_obs, n_base).
   This file and `construct_pooling_reference.csv` are written by
-  `plot_figure6_ancillary_main.py` at the precision printed in the paper
+  `plot_figure5_ancillary_main.py` at the precision printed in the paper
   (estimates and bounds to 1 decimal, construct SDs to 2; p to 3 decimals, 4
   below 0.001, `<0.0001` below that).
 - `construct_pooling_reference.csv` — pain / function / mood construct-level
   mixed-effects output (SD units, 95% CI, p).
 - `responder_detail_mcid.csv` — per-participant per-measure change and MCID
-  flag (`reached_mcid`). This is a reference for checking a recomputation: `plot_extended_figure3_ancillary.py` recounts
+  flag (`reached_mcid`). This is a reference for checking a recomputation: `plot_extended_figure4_ancillary.py` recounts
   MCID responders from the long CSV rather than reading this file.
 - `responders_mcid_summary.csv` — per-measure count of MCID responders; the same
   reference role.
@@ -269,7 +269,7 @@ P3's recorded after therapy began is classified **washout**.
 
 - `pain_surveys.csv` — per-survey pain table, **one row per survey** (11,986
   rows), and the single pain data file for the whole deposit: main Figure 1,
-  Extended Data Figure 1, Extended Data Figure 2 and Table S11 all read it. Each pain scale is its own column, so a
+  Extended Data Figure 2, Extended Data Figure 3 and Table S11 all read it. Each pain scale is its own column, so a
   plotter selects the column it needs and drops the blanks; nothing is stored in
   long form and no derived or extracted copy is written anywhere. Columns:
   - `participant` (P1–P5)
@@ -303,12 +303,12 @@ P3's recorded after therapy began is classified **washout**.
     from that participant's own baseline
 
   Study phase is **not** a column: it is derived where it is needed. Extended
-  Data Figure 1 derives it from `stage` (`pre-trial` → pre-operative, `stage0` →
+  Data Figure 2 derives it from `stage` (`pre-trial` → pre-operative, `stage0` →
   Stage 0 inpatient, everything else → chronic) and reports the result at run
   time. Note that P1–P4's baseline surveys carry stage labels from Stages 1–2
   while every one of P5's is `pre-trial`; `is_baseline` marks both.
 
-  Main Figure 1 and Extended Data Figure 1
+  Main Figure 1 and Extended Data Figure 2
   (`matlab_code/plot_pain_timecourse.m`) plot the full time course from this
   file and are measure-selectable via the second argument, which names the
   scale column to read (`mayoNRS`, `painVAS`, `unpleasantVAS` or `MPQtotal`),
@@ -319,7 +319,7 @@ P3's recorded after therapy began is classified **washout**.
 
 - `longitudinal_phase_metadata.csv` — one row per participant giving the
   double-blind crossover (Stage 3) boundaries used by main Figure 1 and
-  Extended Data Figure 1:
+  Extended Data Figure 2:
   `stage1_implant_date`; `stage3_onset_datetime`, the instant the double-blind
   crossover begins, which is also where the blue crossover block starts;
   `endpoint_datetime`, where each timeline is cut so every participant has a
@@ -338,24 +338,24 @@ P3's recorded after therapy began is classified **washout**.
   with no survey (2175-01-23, 2175-01-28), so the file has 60 days while 58
   carry a survey.
 
-- `ExtFig2_omnibus_condition_stats.csv` — reference statistics for Extended Data
-  Figure 2, per participant × measure: Kruskal–Wallis test across every arm with
+- `ExtFig3_omnibus_condition_stats.csv` — reference statistics for Extended Data
+  Figure 3, per participant × measure: Kruskal–Wallis test across every arm with
   at least three surveys (arms listed in `conditions`): `n_total`,
   `KruskalWallis_H`, `df`, `p_omnibus`. Regenerated by the plotter at run time.
 
-- `ExtFig2_pairwise_condition_stats.csv` — the two directional post-hoc tests
+- `ExtFig3_pairwise_condition_stats.csv` — the two directional post-hoc tests
   per participant × measure: **closed-loop < baseline** and **closed-loop <
   sham**, each a one-tailed Mann–Whitney U test (a one-tailed test is used
   because the clinical hypothesis is directional), Holm-corrected within each
   family. Columns: `comparison`, `MannWhitney_U`, `p_raw`, `p_holm`, `n_test`,
   `n_ref`, `median_test`, `median_ref`. Regenerated by the plotter at run time.
 
-- `ExtFig2_arm_counts_medians.csv` — per participant, arm and measure:
+- `ExtFig3_arm_counts_medians.csv` — per participant, arm and measure:
   `n_surveys`, `n_days`, `median`, `q25`, `q75`. Regenerated by the plotter at
   run time.
 
 The Word version of these statistics, laid out as it appears in the article's
-supplement, is `figures/TableS11_extended_data_figure2_statistics.docx`
+supplement, is `figures/TableS11_extended_data_figure3_statistics.docx`
 (Supplementary Table S11).
 
 ### Ambulatory biomarker features
@@ -390,10 +390,10 @@ One table per participant, in order: `TableS3_P1`, `TableS4_P2`, `TableS5_P3`,
 ### Tables shipped outside this folder
 - **Extended Data Table 2** (all pain scales, closed-loop versus sham) — `figures/ExtendedDataTable2_all_pain_scales_closed_loop_vs_sham.csv`, built by `matlab_code/build_extended_data_table2.m` from `data/extended_data_table2/blinded_window_pain_by_day.csv`, documented above; the formatted `.docx` beside it is rendered from that CSV by `python_code/export_extended_data_table2_word.py`. Columns: `participant`, `pain_scale`, `prospective_index_metric`, `baseline_median_iqr_n_days`, `closed_loop_median_iqr_n_days`, `closed_loop_percent_change_from_baseline`, `sham_median_iqr_n_days`, `sham_percent_change_from_baseline`, `responder_30pct_closed_loop`, `responder_50pct_closed_loop`. Every parenthetical count is a number of participant-days.
 - **Supplementary Table S10** (marginal battery drainage and break-even duty cycle) — no spreadsheet is shipped; the per-hemisphere source table is `data/figureS6_battery_efficiency/breakeven_duty.csv`, documented above.
-- **Supplementary Table S11** (full Extended Data Figure 2 statistics) — `figures/TableS11_extended_data_figure2_statistics.docx`, with the two source CSVs in `data/extended_figures_raw_pain/`.
-- **Extended Data Table 3** (closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations) — `figures/ExtendedDataTable3_closed_loop_algorithm_settings.docx` and `.csv`, with a rendered preview in `ExtendedDataTable3_preview.png`.
-- **Supplementary Table S12** (sensitivity analyses of the closed-loop versus sham model) — `figures/TableS12_sensitivity_analyses.csv`, written by `python_code/build_tableS12_sensitivity_analyses.py` from `data/figure6_double_blind_outcomes/cohort_daily_percent_change.csv`. Columns: `analysis`, `estimate_percent`, `standard_error`, `p_value`, `observations`, `closed_loop_days`, `sham_days`.
-- **Supplementary Table S1** and **Extended Data Table 1** are not shipped.
+- **Supplementary Table S11** (full Extended Data Figure 3 statistics) — `figures/TableS11_extended_data_figure3_statistics.docx`, with the two source CSVs in `data/extended_figures_raw_pain/`.
+- **Extended Data Table 1** (closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations) — `figures/ExtendedDataTable1_closed_loop_algorithm_settings.docx` and `.csv`, with a rendered preview in `ExtendedDataTable1_preview.png`.
+- **Supplementary Table S12** (sensitivity analyses of the closed-loop versus sham model) — `figures/TableS12_sensitivity_analyses.csv`, written by `python_code/build_tableS12_sensitivity_analyses.py` from `data/figure5_double_blind_outcomes/cohort_daily_percent_change.csv`. Columns: `analysis`, `estimate_percent`, `standard_error`, `p_value`, `observations`, `closed_loop_days`, `sham_days`.
+- **Supplementary Table S1** and **Table 1** are not shipped.
 
 ---
 
@@ -555,4 +555,4 @@ calendar day.
 
 Each row is one participant-day: a day enters a condition only if at least one
 report was given, and the value is the mean of that day's reports. Day counts are
-therefore smaller than the survey counts in `ExtFig2_*_condition_stats.csv`.
+therefore smaller than the survey counts in `ExtFig3_*_condition_stats.csv`.

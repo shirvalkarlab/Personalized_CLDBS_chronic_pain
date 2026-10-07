@@ -2,7 +2,7 @@ function color_map = stim_condition_colors()
 % STIM_CONDITION_COLORS  Colour for each stimulation condition.
 %
 %   color_map = STIM_CONDITION_COLORS() returns the condition colours for the
-%   Figure 6 cohort panels. Blue, orange, bluish green and black are Okabe-Ito
+%   Figure 5 cohort panels. Blue, orange, bluish green and black are Okabe-Ito
 %   colours, which stay distinguishable under the common forms of colour-vision
 %   deficiency; sham is neutral grey. Blue (closed-loop) against grey (sham) is
 %   the main contrast.

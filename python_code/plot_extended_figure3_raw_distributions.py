@@ -1,4 +1,4 @@
-"""Extended Data Figure 2 -- raw pain scores by stimulation arm.
+"""Extended Data Figure 3 -- raw pain scores by stimulation arm.
 
 Shows every pain survey, not only the summary statistics of the blinded
 comparison. This figure draws all of them, for each of the three pain
@@ -37,11 +37,11 @@ Arm membership
     form the optimisation arm. Both are checked at run time.
 
 Reads   data/extended_figures_raw_pain/pain_surveys.csv
-Writes  figures/FigureExtended2_raw_pain_distributions.{pdf,png,svg}
-        figures/FigureExtended2_raw_pain_distributions_no_open_loop.{pdf,png,svg}
-        data/extended_figures_raw_pain/ExtFig2_omnibus_condition_stats.csv
-        data/extended_figures_raw_pain/ExtFig2_pairwise_condition_stats.csv
-        data/extended_figures_raw_pain/ExtFig2_arm_counts_medians.csv
+Writes  figures/FigureExtended3_raw_pain_distributions.{pdf,png,svg}
+        figures/FigureExtended3_raw_pain_distributions_no_open_loop.{pdf,png,svg}
+        data/extended_figures_raw_pain/ExtFig3_omnibus_condition_stats.csv
+        data/extended_figures_raw_pain/ExtFig3_pairwise_condition_stats.csv
+        data/extended_figures_raw_pain/ExtFig3_arm_counts_medians.csv
 """
 
 import os
@@ -61,9 +61,9 @@ DATA_DIRECTORY = os.path.join(REPO, "data", "extended_figures_raw_pain")
 FIGURE_DIRECTORY = os.path.join(REPO, "figures")
 SURVEY_CSV = os.path.join(DATA_DIRECTORY, "pain_surveys.csv")
 
-OMNIBUS_OUT = os.path.join(DATA_DIRECTORY, "ExtFig2_omnibus_condition_stats.csv")
-PAIRWISE_OUT = os.path.join(DATA_DIRECTORY, "ExtFig2_pairwise_condition_stats.csv")
-COUNTS_OUT = os.path.join(DATA_DIRECTORY, "ExtFig2_arm_counts_medians.csv")
+OMNIBUS_OUT = os.path.join(DATA_DIRECTORY, "ExtFig3_omnibus_condition_stats.csv")
+PAIRWISE_OUT = os.path.join(DATA_DIRECTORY, "ExtFig3_pairwise_condition_stats.csv")
+COUNTS_OUT = os.path.join(DATA_DIRECTORY, "ExtFig3_arm_counts_medians.csv")
 
 PARTICIPANTS = ["P1", "P2", "P3", "P4", "P5"]
 MEASURES = ["mayoNRS", "painVAS", "MPQtotal"]
@@ -349,10 +349,10 @@ def main():
           f"{int((pairwise.p_holm < 0.05).sum())}")
 
     draw_figure(surveys, pairwise, ALL_ARMS,
-                "FigureExtended2_raw_pain_distributions",
+                "FigureExtended3_raw_pain_distributions",
                 "Raw pain scores by stimulation arm")
     draw_figure(surveys, pairwise, ARMS_WITHOUT_OPEN_LOOP,
-                "FigureExtended2_raw_pain_distributions_no_open_loop",
+                "FigureExtended3_raw_pain_distributions_no_open_loop",
                 "Raw pain scores by stimulation arm (open-loop omitted)")
 
 

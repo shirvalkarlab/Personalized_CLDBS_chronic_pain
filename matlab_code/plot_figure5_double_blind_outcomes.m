@@ -1,8 +1,8 @@
-function figure_handle = plot_figure6_double_blind_outcomes(configuration)
-% PLOT_FIGURE6_DOUBLE_BLIND_OUTCOMES  Double-blind closed-loop versus sham
-% pain outcomes (manuscript Figure 6, panels a-c).
+function figure_handle = plot_figure5_double_blind_outcomes(configuration)
+% PLOT_FIGURE5_DOUBLE_BLIND_OUTCOMES  Double-blind closed-loop versus sham
+% pain outcomes (manuscript Figure 5, panels a-c).
 %
-%   figure_handle = PLOT_FIGURE6_DOUBLE_BLIND_OUTCOMES(configuration) draws the
+%   figure_handle = PLOT_FIGURE5_DOUBLE_BLIND_OUTCOMES(configuration) draws the
 %   three-panel cohort figure comparing closed-loop stimulation against sham:
 %       a) Uniform numeric rating scale - each participant's daily percent
 %          change from their pre-trial baseline on the numeric rating scale,
@@ -29,14 +29,14 @@ function figure_handle = plot_figure6_double_blind_outcomes(configuration)
 %   OUTPUT
 %     figure_handle   Handle to the created figure.
 %
-%   DATA (in data/figure6_double_blind_outcomes/)
+%   DATA (in data/figure5_double_blind_outcomes/)
 %     cohort_daily_percent_change.csv  one row per participant-day-condition,
 %         with patient_id, stim_group, and the percent-change-from-baseline
 %         columns (baseline_percent_diff_<scale>) the figure plots.
 
 % ---- Load the cohort table ---------------------------------------------
 data_file = fullfile(configuration.data_directory, ...
-    'figure6_double_blind_outcomes', 'cohort_daily_percent_change.csv');
+    'figure5_double_blind_outcomes', 'cohort_daily_percent_change.csv');
 cohort_groups = readtable(data_file, 'TextType', 'string');
 
 % ---- Analysis settings the figure needs --------------------------------

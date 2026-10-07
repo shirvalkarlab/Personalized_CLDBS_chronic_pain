@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # =============================================================================
-# HELPER FUNCTIONS (process_figure4bcd_inpatient_pain_decoding.ipynb)
+# HELPER FUNCTIONS (process_figure3bcd_inpatient_pain_decoding.ipynb)
 # =============================================================================
 
 # SIGNIFICANCE TESTING FUNCTIONS
@@ -134,7 +134,7 @@ def process_metric_coefficients(coef_array, mdl, column_names, metric, method_na
 
 
 # =============================================================================
-# Helper functions for Figure 4B (LASSO) and Figure 4C (LDA)
+# Helper functions for Figure 3B (LASSO) and Figure 3C (LDA)
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -164,14 +164,14 @@ def _get_target_model(model_config, pt, method):
 def _load_and_subset(data_dir, pt, filename, target_model):
     """Load dataframe and subset rows for desired model."""
     df = pd.read_excel(
-        data_dir / 'figure4_processed_inpatient_pain_decoding' / filename,
+        data_dir / 'figure3_processed_inpatient_pain_decoding' / filename,
         index_col=0
     )
     return df[df['model'] == target_model]
 
 
 # -----------------------------------------------------------------------------
-# PUBLIC FUNCTION: FIGURE 4C (LDA ROC)
+# PUBLIC FUNCTION: FIGURE 3C (LDA ROC)
 # -----------------------------------------------------------------------------
 def plot_lda_roc(model_config, data_dir, fig_dir=None, save_fig=True):
 
@@ -218,13 +218,13 @@ def plot_lda_roc(model_config, data_dir, fig_dir=None, save_fig=True):
     plt.tight_layout()
 
     if save_fig and fig_dir is not None:
-        plt.savefig(fig_dir / 'Figure4C.pdf', dpi=300, bbox_inches='tight')
+        plt.savefig(fig_dir / 'Figure3C.pdf', dpi=300, bbox_inches='tight')
 
     plt.show()
 
 
 # -----------------------------------------------------------------------------
-# PUBLIC FUNCTION: FIGURE 4B (LASSO SCATTER)
+# PUBLIC FUNCTION: FIGURE 3B (LASSO SCATTER)
 # -----------------------------------------------------------------------------
 def plot_lasso_scatter(model_config, data_dir, fig_dir=None, save_fig=False):
 
@@ -289,7 +289,7 @@ def plot_lasso_scatter(model_config, data_dir, fig_dir=None, save_fig=False):
     plt.tight_layout()
 
     if save_fig and fig_dir is not None:
-        plt.savefig(fig_dir / 'Figure4B.pdf', dpi=300, bbox_inches='tight')
+        plt.savefig(fig_dir / 'Figure3B.pdf', dpi=300, bbox_inches='tight')
 
     plt.show()
     

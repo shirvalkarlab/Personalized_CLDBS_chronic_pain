@@ -1,10 +1,10 @@
-function [figure5d_handle, figure5e_handle] = ...
-        plot_figure5_adaptive_dbs(configuration, adaptive_dbs_data)
-% PLOT_FIGURE5_ADAPTIVE_DBS  Closed-loop stimulation performance (P3 left).
+function [figure4d_handle, figure4e_handle] = ...
+        plot_figure4_adaptive_dbs(configuration, adaptive_dbs_data)
+% PLOT_FIGURE4_ADAPTIVE_DBS  Closed-loop stimulation performance (P3 left).
 %
-%   [figure5d_handle, figure5e_handle] =
-%   PLOT_FIGURE5_ADAPTIVE_DBS(configuration, adaptive_dbs_data) draws the
-%   two closed-loop performance panels of Figure 5, both from participant
+%   [figure4d_handle, figure4e_handle] =
+%   PLOT_FIGURE4_ADAPTIVE_DBS(configuration, adaptive_dbs_data) draws the
+%   two closed-loop performance panels of Figure 4, both from participant
 %   P3's left hemisphere:
 %     Panel d  A zoomed example of the closed-loop control signal, showing
 %              how the linear-discriminant output crosses the two decision
@@ -22,13 +22,13 @@ function [figure5d_handle, figure5e_handle] = ...
 %     configuration       Struct from configure_repository.
 %     adaptive_dbs_data   Struct from read_excel_sheets with two tables
 %                         (the field names are the sheet names in
-%                         data/figure5_adaptive_dbs_performance.xlsx):
+%                         data/figure4_adaptive_dbs_performance.xlsx):
 %       .aDBS_spon_tbl   columns time, on_off, state, ampInMilliamps
 %       .LD_tbl          columns time, LD_output
 %
 %   OUTPUT
-%     figure5d_handle   Handle to Panel d (saved as Figure5d.pdf).
-%     figure5e_handle   Handle to Panel e (saved as Figure5e.pdf).
+%     figure4d_handle   Handle to Panel d (saved as Figure4d.pdf).
+%     figure4e_handle   Handle to Panel e (saved as Figure4e.pdf).
 
 % ---- Two decision thresholds for the control signal --------------------
 % These are the classifier bias values that bracket the control signal:
@@ -73,7 +73,7 @@ state_colormap = [0.5 0.5 0.5; set2_qualitative_colormap(8)];
 % =======================================================================
 %  PANEL d: zoomed control signal with decision thresholds
 % =======================================================================
-figure5d_handle = figure('Units', 'inches', 'Position', [1 1 5 4]);
+figure4d_handle = figure('Units', 'inches', 'Position', [1 1 5 4]);
 
 % ---- State raster on the left axis -------------------------------------
 draw_state_raster(state_table, state_matrix, state_colormap);
@@ -95,7 +95,7 @@ ylim([lower_threshold * 0.5, upper_threshold * 1.5]);
 zoom_start   = dateshift(min(control_signal_table.time), 'end', 'hour');
 zoom_window  = zoom_start + zoom_window_hours;
 zoom_ticks   = linspace(zoom_window(1), zoom_window(2), 4);
-all_axes     = findall(figure5d_handle, 'Type', 'axes');
+all_axes     = findall(figure4d_handle, 'Type', 'axes');
 for axis_index = 1:numel(all_axes)
     set(all_axes(axis_index), 'XLim', zoom_window, 'XTick', zoom_ticks);
 end
@@ -108,13 +108,13 @@ title('Closed-loop control signal example (P3 left)', 'FontWeight', 'normal');
 set(gca, 'YColor', 'r', 'Box', 'off', ...
     'FontSize', configuration.figure_font_size, 'TickDir', 'both');
 
-output_file_d = fullfile(configuration.figure_directory, 'Figure5d.pdf');
-exportgraphics(figure5d_handle, output_file_d, configuration.figure_export_options{:});
+output_file_d = fullfile(configuration.figure_directory, 'Figure4d.pdf');
+exportgraphics(figure4d_handle, output_file_d, configuration.figure_export_options{:});
 
 % =======================================================================
 %  PANEL e: duty cycle over days, with the state raster beneath
 % =======================================================================
-figure5e_handle = figure('Units', 'inches', 'Position', [1 1 5 4]);
+figure4e_handle = figure('Units', 'inches', 'Position', [1 1 5 4]);
 tiledlayout(4, 1, 'TileSpacing', 'compact');
 
 % ---- Top: trailing one-hour duty cycle ---------------------------------
@@ -139,8 +139,8 @@ xticklabels(1:numel(daily_tick_times));
 xlabel('Time (days)');
 set(gca, 'FontSize', configuration.figure_font_size, 'TickDir', 'both');
 
-output_file_e = fullfile(configuration.figure_directory, 'Figure5e.pdf');
-exportgraphics(figure5e_handle, output_file_e, configuration.figure_export_options{:});
+output_file_e = fullfile(configuration.figure_directory, 'Figure4e.pdf');
+exportgraphics(figure4e_handle, output_file_e, configuration.figure_export_options{:});
 
 end
 

@@ -23,7 +23,7 @@ function figure_handle = plot_pain_timecourse(configuration, measure, participan
 %   All three panels share one x origin (days since the first baseline survey)
 %   and a common y scale. This single function makes BOTH manuscript figures:
 %     - main Figure 1            : one participant (P3), pain VAS
-%     - Extended Data Figure 1   : all five participants, any selectable
+%     - Extended Data Figure 2   : all five participants, any selectable
 %                                  pain measure
 %   so there is one plotter and no hand-curated figure data.
 %
@@ -59,7 +59,7 @@ function figure_handle = plot_pain_timecourse(configuration, measure, participan
 %     participants    - optional string array of participant labels to draw,
 %                       one row each (default ["P1" "P2" "P3" "P4" "P5"]).
 %     output_basename - optional output file name without extension
-%                       (default "FigureExtended1_" + measure + "_timecourse").
+%                       (default "FigureExtended2_" + measure + "_timecourse").
 %     figure_title    - optional overall title (default describes the measure).
 %     vas50_run_threshold - optional scalar (default 4). The pain-intensity VAS
 %                       slider opens at 50 and, when not moved, records 50
@@ -150,7 +150,7 @@ y_maximum = measure_axis_maximum.(measure);
 y_label   = measure_axis_label.(measure);
 
 if nargin < 4 || isempty(output_basename)
-    output_basename = "FigureExtended1_" + measure + "_timecourse";
+    output_basename = "FigureExtended2_" + measure + "_timecourse";
 end
 output_basename = string(output_basename);
 if nargin < 5 || isempty(figure_title)

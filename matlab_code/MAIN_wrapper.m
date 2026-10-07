@@ -4,7 +4,7 @@
 =========================================================================
  Generates the MATLAB figures and supplementary tables for:
 
-   "Bespoke closed-loop deep brain stimulation for chronic pain:
+   "Personalized closed-loop deep brain stimulation for chronic pain:
     a randomized, double-blind crossover pilot trial"
    Shirvalkar et al., 2026, Nature Medicine.
 
@@ -15,17 +15,17 @@
  WHICH FIGURES ARE MADE HERE (MATLAB):
    Figure 1    Pain timeline for one participant, pre-operative through
                chronic closed-loop stimulation.
-   Figure 3    Inpatient pain relief by stimulation brain region.
-   Figure 5    (panels d and e) Closed-loop stimulation performance:
+   Figure 2    Inpatient pain relief by stimulation brain region.
+   Figure 4    (panels d and e) Closed-loop stimulation performance:
                control signal and effective duty cycle.
-   Figure 6    (panels a to c) Double-blind closed-loop versus sham pain
+   Figure 5    (panels a to c) Double-blind closed-loop versus sham pain
                outcomes.
    Figure S7   Acute analgesia versus chronic benefit.
    Figure S11  Chronic stimulation programming history.
-   Extended Data Figure 1  Longitudinal pain time course, all participants.
+   Extended Data Figure 2  Longitudinal pain time course, all participants.
 
  The remaining panels are produced by the Python code in python_code/:
- Figures 4b-d, 5a-c, 6d-f, S1-S6, S8 and Extended Data Figures 2 and 3.
+ Figures 3b-d, 4a-c, 5d-f, S1-S6, S8 and Extended Data Figures 3 and 4.
 
  HOW TO RUN
    Run this file from anywhere; it finds the repository root from its own
@@ -69,7 +69,7 @@ configuration = configure_repository(repository_directory);
 % =======================================================================
 %  FIGURE 1  Pain timeline: pre-operative to chronic closed-loop (P3, pain VAS)
 % =======================================================================
-% Figure 1 and Extended Data Figure 1 are drawn by the SAME plotter
+% Figure 1 and Extended Data Figure 2 are drawn by the SAME plotter
 % (plot_pain_timecourse) straight from the per-survey pain-score CSV in
 % data/extended_figures_raw_pain/, so there is no hand-curated figure data.
 % Main Figure 1 is the single-participant case: participant P3, pain
@@ -78,37 +78,37 @@ figure1_handle = plot_pain_timecourse(configuration, "painVAS", "P3", ...
     "Figure1", "Participant P3 - pain over the full trial (pain intensity VAS)");
 
 % =======================================================================
-%  FIGURE 3  Inpatient pain relief by stimulation brain region
+%  FIGURE 2  Inpatient pain relief by stimulation brain region
 % =======================================================================
-figure3_data = read_excel_sheets(fullfile(configuration.data_directory, ...
-                                           'figure3_inpatient_analgesia.xlsx'));
-[figure3_handle, figure3_statistics] = ...
-    plot_figure3_inpatient_analgesia(configuration, figure3_data);
+figure2_data = read_excel_sheets(fullfile(configuration.data_directory, ...
+                                           'figure2_inpatient_analgesia.xlsx'));
+[figure2_handle, figure2_statistics] = ...
+    plot_figure2_inpatient_analgesia(configuration, figure2_data);
 
 % =======================================================================
-%  FIGURE 5, PANELS d AND e  Closed-loop stimulation performance
+%  FIGURE 4, PANELS d AND e  Closed-loop stimulation performance
 % =======================================================================
 % Panel d is the closed-loop control signal with its two decision
 % thresholds; panel e is the resulting effective duty cycle over about six days,
-% both from participant P3's left hemisphere. Panels a to c of Figure 5
+% both from participant P3's left hemisphere. Panels a to c of Figure 4
 % (ambulatory pain decoding) come from the Python notebooks.
-figure5_data = read_excel_sheets(fullfile(configuration.data_directory, ...
-                                           'figure5_adaptive_dbs_performance.xlsx'));
-[figure5d_handle, figure5e_handle] = ...
-    plot_figure5_adaptive_dbs(configuration, figure5_data);
+figure4_data = read_excel_sheets(fullfile(configuration.data_directory, ...
+                                           'figure4_adaptive_dbs_performance.xlsx'));
+[figure4d_handle, figure4e_handle] = ...
+    plot_figure4_adaptive_dbs(configuration, figure4_data);
 
 % =======================================================================
-%  FIGURE 6, PANELS a TO c  Double-blind closed-loop versus sham outcomes
+%  FIGURE 5, PANELS a TO c  Double-blind closed-loop versus sham outcomes
 % =======================================================================
-% plot_figure6_double_blind_outcomes reads the per-day cohort table in
-% data/figure6_double_blind_outcomes/ and draws the three panels (uniform
+% plot_figure5_double_blind_outcomes reads the per-day cohort table in
+% data/figure5_double_blind_outcomes/ and draws the three panels (uniform
 % numeric rating scale, index metric, and response curve).
-figure6_handle     = plot_figure6_double_blind_outcomes(configuration);
+figure5_handle     = plot_figure5_double_blind_outcomes(configuration);
 % The pre-specified closed-loop-versus-sham mixed-effects tests are fitted to
 % the same per-day table and printed.
-figure6_statistics = compute_figure6_statistics(configuration);
-% Panels d and e of Figure 6 (ancillary behavioural outcomes) are drawn by
-% python_code/plot_figure6_ancillary_main.py.
+figure5_statistics = compute_figure5_statistics(configuration);
+% Panels d and e of Figure 5 (ancillary behavioural outcomes) are drawn by
+% python_code/plot_figure5_ancillary_main.py.
 
 % =======================================================================
 %  EXTENDED DATA TABLE 2  All pain scales, closed-loop versus sham
@@ -150,7 +150,7 @@ figureS11_handles = plot_figureS11_programming_history(configuration);
 % hollow circles. This is the SAME plotter as Figure 1, called with all five
 % participants. Reads data/extended_figures_raw_pain/. The default measure is
 % the pain intensity VAS; the figure is saved as
-% figures/FigureExtended1_painVAS_timecourse.pdf.
+% figures/FigureExtended2_painVAS_timecourse.pdf.
 figureExtended1_handle = plot_pain_timecourse(configuration, "painVAS", ...
     ["P1", "P2", "P3", "P4", "P5"]);
 
@@ -160,12 +160,12 @@ figureExtended1_handle = plot_pain_timecourse(configuration, "painVAS", ...
 
 
 % =======================================================================
-%  OPTIONAL  Extended Data Figure 1 for any pain measure
+%  OPTIONAL  Extended Data Figure 2 for any pain measure
 % =======================================================================
 % Run this cell on its own (Ctrl+Enter in the MATLAB editor) to regenerate the
 % longitudinal time course for a pain measure other than the default. Set
 % selected_measure to one of "mayoNRS", "painVAS", "unpleasantVAS", or
-% "MPQtotal". Each run writes figures/FigureExtended1_<measure>_timecourse.pdf.
+% "MPQtotal". Each run writes figures/FigureExtended2_<measure>_timecourse.pdf.
 %
 %   selected_measure = "mayoNRS";
 %   plot_pain_timecourse(configuration, selected_measure, ["P1","P2","P3","P4","P5"]);

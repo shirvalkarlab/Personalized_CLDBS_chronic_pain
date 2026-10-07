@@ -401,7 +401,7 @@ def leave_one_out_auc(Feature, Label):
     fpr, tpr, _ = metrics.roc_curve(Label >= np.mean(Label), LDAOutput)
     return np.trapz(y=tpr, x=fpr)
 
-# Surveys used to train and test the Figure 5b AUC (and its permutation test):
+# Surveys used to train and test the Figure 4b AUC (and its permutation test):
 #   "high_low" : only surveys at or below the 30th or at or above the 70th pain percentile (default)
 #   "all"      : every survey, labelled high when pain is at or above the mean
 AUC_TRAINING_SET = "high_low"

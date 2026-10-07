@@ -7,7 +7,7 @@ Supplementary Figure S8 — Stability of the ambulatory pain-decoding biomarker
                           over time.
 
 Code for:
-  "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized,
+  "Personalized closed-loop deep brain stimulation for chronic pain: a randomized,
    double-blind crossover pilot trial" (Shirvalkar et al., 2026, Nature Medicine).
 
 WHAT THIS SCRIPT DOES

@@ -2,7 +2,7 @@ function face = condition_box_face(condition)
 % CONDITION_BOX_FACE  Pale box-fill colour for a stimulation condition.
 %
 %   face = CONDITION_BOX_FACE(condition) returns the pale fill used by the
-%   cohort box + swarm figures (Figure 6a,b). Each summary box gets a light
+%   cohort box + swarm figures (Figure 5a,b). Each summary box gets a light
 %   neutral tint, so the black outline and the black swarm read clearly on
 %   top, rather than a saturated condition colour:
 %     - baseline / sham / pre-trial   -> light grey

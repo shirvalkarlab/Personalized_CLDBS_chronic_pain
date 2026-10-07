@@ -1,16 +1,16 @@
 """Render Supplementary Table S11 as a Word document.
 
 Reads the two statistics tables written by
-plot_extended_figure2_raw_distributions.py and formats them as Table S11.1
+plot_extended_figure3_raw_distributions.py and formats them as Table S11.1
 (Kruskal-Wallis omnibus screen) and Table S11.2 (directional post-hoc
 contrasts).
 
-Reads   data/extended_figures_raw_pain/ExtFig2_omnibus_condition_stats.csv
-        data/extended_figures_raw_pain/ExtFig2_pairwise_condition_stats.csv
+Reads   data/extended_figures_raw_pain/ExtFig3_omnibus_condition_stats.csv
+        data/extended_figures_raw_pain/ExtFig3_pairwise_condition_stats.csv
         data/extended_figures_raw_pain/pain_surveys.csv (data-quality check:
         a caveat is added if an arm's scores are mostly zeros contradicted by
         the paired NRS; none is added for the shipped data)
-Writes  figures/TableS11_extended_data_figure2_statistics.docx
+Writes  figures/TableS11_extended_data_figure3_statistics.docx
 
 Usage:
     python export_tableS11_word.py
@@ -27,9 +27,9 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATISTICS_DIRECTORY = os.path.join(PROJECT_ROOT, "data",
                                     "extended_figures_raw_pain")
 FIGURE_DIRECTORY = os.path.join(PROJECT_ROOT, "figures")
-OUTPUT_NAME = "TableS11_extended_data_figure2_statistics.docx"
+OUTPUT_NAME = "TableS11_extended_data_figure3_statistics.docx"
 
-# Printed measure names, in the order the panels appear in Extended Data Figure 2.
+# Printed measure names, in the order the panels appear in Extended Data Figure 3.
 # Bare abbreviations: the scales and their ranges are named in the preamble, so
 # repeating "Pain intensity VAS (0-100)" on 15 rows only widens the column.
 MEASURE_LABELS = {
@@ -38,13 +38,13 @@ MEASURE_LABELS = {
     "MPQtotal": "MPQ",
 }
 
-TITLE = ("Supplementary Table S11 | Full statistics for Extended Data Figure 2 "
+TITLE = ("Supplementary Table S11 | Full statistics for Extended Data Figure 3 "
          "(raw pain-score distributions by stimulation arm).")
 
 PREAMBLE = (
     "Scales are the numeric rating scale (NRS, 0-10), pain intensity visual "
     "analogue scale (VAS, 0-100) and McGill Pain Questionnaire short-form total "
-    "(MPQ). Extended Data Figure 2 draws six mutually exclusive arms: baseline, "
+    "(MPQ). Extended Data Figure 3 draws six mutually exclusive arms: baseline, "
     "open-loop optimization (unblinded), closed-loop optimization (unblinded), "
     "closed-loop double-blind, sham double-blind (0 mA), and washout with "
     "carryover (0 mA). Per participant and scale, all arms were screened with a "
@@ -69,8 +69,8 @@ PAIRWISE_TITLE = ("Table S11.2 | Directional post-hoc contrasts, one-tailed "
                   "double-blind.")
 
 FOOTNOTE = ("*p < 0.05, **p < 0.01, ***p < 0.001; ns, not significant. "
-            "Source data: ExtFig2_omnibus_condition_stats.csv, "
-            "ExtFig2_pairwise_condition_stats.csv.")
+            "Source data: ExtFig3_omnibus_condition_stats.csv, "
+            "ExtFig3_pairwise_condition_stats.csv.")
 
 SURVEY_CSV = os.path.join(STATISTICS_DIRECTORY, "pain_surveys.csv")
 
@@ -253,9 +253,9 @@ def pairwise_rows(pairwise):
 
 def main():
     omnibus = pd.read_csv(os.path.join(STATISTICS_DIRECTORY,
-                                       "ExtFig2_omnibus_condition_stats.csv"))
+                                       "ExtFig3_omnibus_condition_stats.csv"))
     pairwise = pd.read_csv(os.path.join(STATISTICS_DIRECTORY,
-                                        "ExtFig2_pairwise_condition_stats.csv"))
+                                        "ExtFig3_pairwise_condition_stats.csv"))
 
     unknown = (set(omnibus.measure) | set(pairwise.measure)) - set(MEASURE_LABELS)
     if unknown:
