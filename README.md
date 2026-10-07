@@ -365,27 +365,17 @@ terminal data.
 
 ### Pain-decoding significance figures (S1, S2, S3) — `decoding_figures/`
 
-These six numbered scripts must run in order, and are the one Python workflow
-here with that constraint. Scripts `02` and `04` need the model coefficient
-files, which `01` recreates; run `01` for every participant first.
-Scripts `03`, `05` and `06` read the shipped precomputed results and so run
-without re-fitting anything. To re-fit from `neural_features/` instead, start at
-`01`:
+Run the scripts in this order from `python_code/decoding_figures/`:
 
-```bash
-cd python_code/decoding_figures
-for p in P1 P2 P3 P4 P5; do
-    python 01_run_ml_pipeline.py --participant $p   # fits LASSO + LDA models
-done
-python 02_extract_significant_models.py # channel-level feature importance
-python 03_plot_significance_heatmaps.py # Figure S1 — AUC and R2 heatmaps
-python 04_plot_freq_coefficients.py     # frequency-band counts (supporting analysis)
-python 05_plot_hemisphere_comparison.py # Figure S3 — hemisphere feature prominence
-python 06_plot_sample_counts.py         # Figure S2 — sample counts per model
-```
+1. `01_run_ml_pipeline.py --participant P1` (repeat for P2–P5); recreates the model coefficient files
+2. `02_extract_significant_models.py`
+3. `03_plot_significance_heatmaps.py` (Figure S1)
+4. `04_plot_freq_coefficients.py`
+5. `05_plot_hemisphere_comparison.py` (Figure S3)
+6. `06_plot_sample_counts.py` (Figure S2)
 
-All six share the same results root, organized by participant label, so the
-sequence chains without any path editing.
+Scripts 03, 05 and 06 also run from the shipped results without 01.
+
 [`decoding_figures/README.md`](python_code/decoding_figures/README.md) documents
 each script's inputs and outputs.
 

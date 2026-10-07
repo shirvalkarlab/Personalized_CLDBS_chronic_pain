@@ -24,17 +24,14 @@ predict pain scores in the five participants (P1–P5).
 
 ## Script execution order
 
-Scripts 03, 05 and 06 run from the shipped results; 02 and 04 need the
-model coefficient files, which 01 recreates.
+1. `01_run_ml_pipeline.py --participant P1` (repeat for P2–P5); recreates the model coefficient files
+2. `02_extract_significant_models.py`
+3. `03_plot_significance_heatmaps.py` (Figure S1)
+4. `04_plot_freq_coefficients.py`
+5. `05_plot_hemisphere_comparison.py` (Figure S3)
+6. `06_plot_sample_counts.py` (Figure S2)
 
-```
-01_run_ml_pipeline.py
-   ├──▶ 02_extract_significant_models.py
-   │       ├──▶ 03_plot_significance_heatmaps.py
-   │       └──▶ 05_plot_hemisphere_comparison.py
-   ├──▶ 04_plot_freq_coefficients.py
-   └──▶ 06_plot_sample_counts.py
-```
+Scripts 03, 05 and 06 also run from the shipped results without 01.
 
 ## Script descriptions
 
