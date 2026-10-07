@@ -1,0 +1,6 @@
+participant,response_group,days,median,mean,standard_deviation,interquartile_range,first_quartile,third_quartile,coefficient_of_variation_percent,minimum,maximum,trend_rho_daily,trend_p_daily,trend_rho_monthly,trend_p_monthly,first_3_months_median,last_3_months_median,change_first_to_last
+P1,Responder,247,18.4095,28.4433,29.5294,27.9778,8.1891,36.1669,103.8183,0.0,100.0,-0.4464,0.0,-0.4681,0.0581,35.7791,7.5818,-28.1973
+P3,Responder,437,29.2128,39.4238,31.1646,39.7161,14.7507,54.4668,79.0502,0.0,100.0,-0.3221,0.0,-0.4888,0.018,39.8098,25.1659,-14.6439
+P5,Responder,177,11.542,19.7295,16.8479,23.5688,7.4215,30.9903,85.3943,0.3001,71.9687,-0.4981,0.0,-0.4667,0.1739,18.8577,7.2542,-11.6036
+P2,Non-responder,168,44.1944,47.0011,24.8843,21.2517,31.7665,53.0182,52.944,0.0,99.4344,-0.4928,0.0,-0.7619,0.028,59.5818,33.7719,-25.8099
+P4,Non-responder,230,50.0346,54.062,29.6438,55.5229,29.1984,84.7213,54.833,0.8058,99.9654,0.1307,0.0477,0.4126,0.1826,27.9957,50.2655,22.2698

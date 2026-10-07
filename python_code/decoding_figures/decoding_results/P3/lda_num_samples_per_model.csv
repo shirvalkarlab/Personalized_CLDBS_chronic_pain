@@ -1,0 +1,21 @@
+Time Window,Metric,Low Pain Samples,High Pain Samples,Total Used
+one_minute,nrs_s0,40,69,109
+one_minute,intensity_vas_s0,34,36,70
+one_minute,unpleasantness_vas_s0,34,35,69
+one_minute,mood_vas_s0,33,33,66
+one_minute,relief_s0,17,16,33
+five_minute,nrs_s0,18,20,38
+five_minute,intensity_vas_s0,18,19,37
+five_minute,unpleasantness_vas_s0,20,23,43
+five_minute,mood_vas_s0,18,18,36
+five_minute,relief_s0,5,5,10
+ten_minute,nrs_s0,33,18,51
+ten_minute,intensity_vas_s0,16,17,33
+ten_minute,unpleasantness_vas_s0,16,20,36
+ten_minute,mood_vas_s0,16,16,32
+ten_minute,relief_s0,3,5,8
+thirty_minute,nrs_s0,23,17,40
+thirty_minute,intensity_vas_s0,12,14,26
+thirty_minute,unpleasantness_vas_s0,14,15,29
+thirty_minute,mood_vas_s0,12,12,24
+thirty_minute,relief_s0,0,0,0

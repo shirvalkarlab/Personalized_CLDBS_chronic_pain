@@ -1,0 +1,13 @@
+measure,n,reached_mcid
+BAI,5,3
+BDI,5,2
+HamD6,5,1
+sf36_composite,5,2
+randEmotion,5,0
+randEnergy,5,3
+randGeneral,5,2
+randPain,5,4
+randPhysFxn,5,4
+randRoleEmotional,5,1
+randRolePhysical,5,1
+randSocial,5,3

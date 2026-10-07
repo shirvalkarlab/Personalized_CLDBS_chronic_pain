@@ -1,0 +1,16 @@
+measure,participant,conditions,n_total,KruskalWallis_H,df,p_omnibus
+mayoNRS,P1,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1622,133.45092512249707,5,4.40582164462601e-27
+mayoNRS,P2,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1406,183.6013569030562,5,9.102931707145571e-38
+mayoNRS,P3,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Washout + carryover (0 mA)",2568,640.4751574435184,4,2.6878993786690644e-137
+mayoNRS,P4,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",2469,89.35417206896163,5,9.182838686028196e-18
+mayoNRS,P5,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",2385,563.9156374416883,5,1.2624773069113995e-119
+painVAS,P1,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1621,276.57473633616144,5,1.0834250211431889e-57
+painVAS,P2,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1405,222.1994672830132,5,5.020908786418639e-46
+painVAS,P3,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Washout + carryover (0 mA)",2567,602.7628246743667,4,3.910846451492907e-129
+painVAS,P4,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",2469,140.9563970126577,5,1.1203745159807748e-28
+painVAS,P5,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Washout + carryover (0 mA)",2379,566.1174023357187,4,3.331011446216858e-121
+MPQtotal,P1,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1622,157.9518507355655,5,2.7040796395604936e-32
+MPQtotal,P2,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",1404,204.76891819822464,5,2.7105427377499806e-42
+MPQtotal,P3,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Washout + carryover (0 mA)",2567,516.478502511307,4,1.827338175418371e-110
+MPQtotal,P4,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Sham, double-blind (0 mA), Washout + carryover (0 mA)",2469,243.38422196037988,5,1.4434018524450384e-50
+MPQtotal,P5,"Baseline, Open-loop optimization, unblinded, Closed-loop optimization, unblinded, Closed-loop, double-blind, Washout + carryover (0 mA)",2379,562.4763270905876,4,2.0437755969282067e-120

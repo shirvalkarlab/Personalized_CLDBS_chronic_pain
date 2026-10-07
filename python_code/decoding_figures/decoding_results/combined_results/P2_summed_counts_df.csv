@@ -1,0 +1,21 @@
+anat,count,hemisphere
+L ACC,14,left
+L Caudate WM,12,left
+L PVG,10,left
+L CMThal,9,left
+L ACC WM,7,left
+L PINS,7,left
+L Thal WM,5,left
+L M1,4,left
+L CC WM,4,left
+L SFG WM,4,left
+R ACC,11,right
+R Caudate,9,right
+R CMThal,8,right
+R SFG WM,7,right
+R Caudate WM,6,right
+R SGC WM,5,right
+R Premotor,3,right
+R Thal WM,3,right
+R FOP,3,right
+R PVG,2,right

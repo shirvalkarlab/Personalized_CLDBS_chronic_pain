@@ -1,0 +1,21 @@
+anat,count,hemisphere
+L PINS,29,left
+L MFG WM,22,left
+L ACC WM,21,left
+L MFG,18,left
+L ACC,17,left
+L PAG,16,left
+L GP,11,left
+L Caudate WM,10,left
+L SFG WM,10,left
+L PCC WM,9,left
+R MFG WM,48,right
+R DLPFC,17,right
+R MFG,11,right
+R PINS,11,right
+R GP,11,right
+R Caudate WM,10,right
+R SFG,9,right
+R Putamen,8,right
+R IFG Op,7,right
+R INS WM,7,right

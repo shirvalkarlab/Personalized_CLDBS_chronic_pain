@@ -1,0 +1,10 @@
+hem,patient,side,E_full_Jday,therapy_drain_full_mAhday,sensing_overhead_mAhday,breakeven_cl_duty,breakeven_lo,breakeven_hi,actual_cl_duty,status
+P1R,P1,R,29.15,5.81,1.78,0.693,0.623,0.762,0.2,saves
+P2L,P2,L,9.59,1.91,1.78,0.066,-0.145,0.278,0.407,no save
+P2R,P2,R,13.88,2.76,1.78,0.355,0.209,0.501,0.435,no save
+P3L,P3,L,5.6,1.11,1.78,-0.6,-0.961,-0.238,0.253,CL never saves
+P3R,P3,R,10.19,2.03,1.78,0.121,-0.077,0.32,0.274,no save
+P4L,P4,L,27.33,5.44,1.78,0.672,0.598,0.747,0.0,saves
+P4R,P4,R,8.66,1.73,1.78,-0.033,-0.267,0.2,0.422,CL never saves
+P5L,P5,L,1.53,0.31,1.78,-4.845,-6.167,-3.523,0.09,CL never saves
+P5R,P5,R,1.44,0.29,1.78,-5.204,-6.608,-3.801,0.326,CL never saves

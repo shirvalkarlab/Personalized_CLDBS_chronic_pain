@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+# MATLAB
+*.asv
+*.m~
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+python_code/stability_and_closed_loop/exploratory_output/
+neural_data/ambulatory_stages123_rebuilt/
+
+# The HDF5 files under neural_data/ are small and are tracked.
+
+# python_code/decoding_figures/decoding_results/ is tracked in full: it holds the
+# precomputed decoding results — the model outputs, the per-participant
+# significance and hemisphere figures under <participant>/figs/, and the
+# cross-participant summaries under combined_results/ — which let a reader
+# regenerate the decoding figures by running scripts 03, 05 and 06 without re-fitting any
+# model. No pattern above may match inside that tree.
+#
+# Scripts 01-06 overwrite those files in place when re-run, so there is no
+# separate generated-output directory to exclude.

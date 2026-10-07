@@ -1,0 +1,10 @@
+device_side,participant,n_events,n_cache_files,file,size_mb
+P1R,P1,610,1036,P1R_ambulatory_features.h5,0.484
+P2L,P2,771,1107,P2L_ambulatory_features.h5,0.619
+P2R,P2,837,1190,P2R_ambulatory_features.h5,0.664
+P3L,P3,1621,2128,P3L_ambulatory_features.h5,1.235
+P3R,P3,1666,2142,P3R_ambulatory_features.h5,1.264
+P4L,P4,776,874,P4L_ambulatory_features.h5,0.614
+P4R,P4,776,889,P4R_ambulatory_features.h5,0.614
+P5L,P5,1952,2159,P5L_ambulatory_features.h5,1.498
+P5R,P5,1973,2132,P5R_ambulatory_features.h5,1.512

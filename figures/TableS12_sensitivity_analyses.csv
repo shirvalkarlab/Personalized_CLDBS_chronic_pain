@@ -1,0 +1,11 @@
+analysis,estimate_percent,standard_error,p_value,observations,closed_loop_days,sham_days
+Full model (as reported),-64.4,31.3,0.04,286,228,58
+Excluding P1 sham observations,-69.1,49.3,0.161,283,228,55
+Excluding P2 sham observations,-64.1,32.1,0.045,239,228,11
+Excluding P4 sham observations,-61.8,33.1,0.062,282,228,54
+Excluding P5 sham observations,-36.9,18.3,0.043,282,228,54
+Leave-one-out: P1 removed,-70.3,65.5,0.283,262,207,55
+Leave-one-out: P2 removed,-79.6,35.6,0.025,172,161,11
+Leave-one-out: P3 removed,-49.0,35.0,0.162,257,199,58
+Leave-one-out: P4 removed,-80.9,34.6,0.02,233,179,54
+Leave-one-out: P5 removed,-26.3,16.4,0.107,220,166,54

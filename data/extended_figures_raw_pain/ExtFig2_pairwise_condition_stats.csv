@@ -1,0 +1,26 @@
+measure,participant,comparison,MannWhitney_U,p_raw,p_holm,n_test,n_ref,median_test,median_ref
+mayoNRS,P1,"Closed-loop, double-blind < Baseline",139.0,4.7838959954017864e-11,9.567791990803573e-11,26,72,4.0,7.0
+mayoNRS,P1,"Closed-loop, double-blind < Sham, double-blind (0 mA)",0.0,0.0023559105150673383,0.0023559105150673383,26,3,4.0,7.0
+mayoNRS,P2,"Closed-loop, double-blind < Baseline",3826.5,6.079342327617714e-13,1.2158684655235427e-12,104,147,5.0,6.0
+mayoNRS,P2,"Closed-loop, double-blind < Sham, double-blind (0 mA)",3380.0,0.07196541102282455,0.07196541102282455,104,73,5.0,5.0
+mayoNRS,P3,"Closed-loop, double-blind < Baseline",1249.5,3.268282520451807e-24,3.268282520451807e-24,54,298,1.0,6.0
+mayoNRS,P4,"Closed-loop, double-blind < Baseline",12189.5,0.00034075085429465484,0.0006815017085893097,137,223,6.0,7.0
+mayoNRS,P4,"Closed-loop, double-blind < Sham, double-blind (0 mA)",492.0,0.14327710250357656,0.14327710250357656,137,9,6.0,7.0
+mayoNRS,P5,"Closed-loop, double-blind < Baseline",64.5,1.0475059278485352e-78,2.0950118556970703e-78,308,174,0.0,5.0
+mayoNRS,P5,"Closed-loop, double-blind < Sham, double-blind (0 mA)",0.0,6.61049348888671e-05,6.61049348888671e-05,308,4,0.0,8.5
+painVAS,P1,"Closed-loop, double-blind < Baseline",9.0,4.310736513938314e-14,8.621473027876628e-14,26,72,39.0,80.5
+painVAS,P1,"Closed-loop, double-blind < Sham, double-blind (0 mA)",2.0,0.004438940979030772,0.004438940979030772,26,3,39.0,61.0
+painVAS,P2,"Closed-loop, double-blind < Baseline",2947.5,2.1621629529450158e-17,4.3243259058900317e-17,103,147,50.0,59.0
+painVAS,P2,"Closed-loop, double-blind < Sham, double-blind (0 mA)",3360.0,0.0884342996208991,0.0884342996208991,103,73,50.0,50.0
+painVAS,P3,"Closed-loop, double-blind < Baseline",1359.5,4.201251981789644e-23,4.201251981789644e-23,54,298,7.5,58.0
+painVAS,P4,"Closed-loop, double-blind < Baseline",8884.0,1.2563396356066375e-11,2.512679271213275e-11,137,223,59.0,65.0
+painVAS,P4,"Closed-loop, double-blind < Sham, double-blind (0 mA)",404.5,0.042373993595583095,0.042373993595583095,137,9,59.0,64.0
+painVAS,P5,"Closed-loop, double-blind < Baseline",23.0,1.6506740539933854e-75,1.6506740539933854e-75,308,174,1.0,50.0
+MPQtotal,P1,"Closed-loop, double-blind < Baseline",100.0,8.312565633989744e-12,1.662513126797949e-11,26,72,12.5,22.0
+MPQtotal,P1,"Closed-loop, double-blind < Sham, double-blind (0 mA)",3.0,0.005355799200296324,0.005355799200296324,26,3,12.5,25.0
+MPQtotal,P2,"Closed-loop, double-blind < Baseline",1919.0,3.381374985834856e-24,6.762749971669712e-24,103,147,14.0,19.0
+MPQtotal,P2,"Closed-loop, double-blind < Sham, double-blind (0 mA)",5220.5,0.9999972536164116,0.9999972536164116,103,73,14.0,12.0
+MPQtotal,P3,"Closed-loop, double-blind < Baseline",1040.0,9.579867583109391e-25,9.579867583109391e-25,54,298,2.0,15.0
+MPQtotal,P4,"Closed-loop, double-blind < Baseline",21766.5,0.9999999999940072,0.9999999999940072,137,223,28.0,23.0
+MPQtotal,P4,"Closed-loop, double-blind < Sham, double-blind (0 mA)",523.0,0.2242624880306912,0.4485249760613824,137,9,28.0,31.0
+MPQtotal,P5,"Closed-loop, double-blind < Baseline",206.0,2.049629327973886e-77,2.049629327973886e-77,308,174,0.0,12.0

@@ -1,0 +1,91 @@
+participant,arm,measure,n_surveys,n_days,median,q25,q75
+P1,Baseline,mayoNRS,72,33,7.0,6.0,9.0
+P1,Baseline,painVAS,72,33,80.5,74.0,96.0
+P1,Baseline,MPQtotal,72,33,22.0,20.0,27.0
+P1,"Open-loop optimization, unblinded",mayoNRS,593,370,5.0,4.0,6.0
+P1,"Open-loop optimization, unblinded",painVAS,592,370,60.0,43.0,68.0
+P1,"Open-loop optimization, unblinded",MPQtotal,593,370,14.0,10.0,19.0
+P1,"Closed-loop optimization, unblinded",mayoNRS,493,284,4.0,4.0,6.0
+P1,"Closed-loop optimization, unblinded",painVAS,493,284,39.0,31.0,56.0
+P1,"Closed-loop optimization, unblinded",MPQtotal,493,284,12.0,9.0,15.0
+P1,"Closed-loop, double-blind",mayoNRS,26,21,4.0,3.0,5.0
+P1,"Closed-loop, double-blind",painVAS,26,21,39.0,32.0,46.5
+P1,"Closed-loop, double-blind",MPQtotal,26,21,12.5,6.5,14.0
+P1,"Sham, double-blind (0 mA)",mayoNRS,3,3,7.0,7.0,7.5
+P1,"Sham, double-blind (0 mA)",painVAS,3,3,61.0,60.5,66.5
+P1,"Sham, double-blind (0 mA)",MPQtotal,3,3,25.0,21.0,26.5
+P1,Washout + carryover (0 mA),mayoNRS,435,212,4.0,3.0,5.5
+P1,Washout + carryover (0 mA),painVAS,435,212,47.0,33.0,65.5
+P1,Washout + carryover (0 mA),MPQtotal,435,212,11.0,8.0,15.0
+P2,Baseline,mayoNRS,147,51,6.0,5.0,7.0
+P2,Baseline,painVAS,147,51,59.0,54.5,64.0
+P2,Baseline,MPQtotal,147,51,19.0,17.0,27.0
+P2,"Open-loop optimization, unblinded",mayoNRS,800,531,5.0,4.0,5.0
+P2,"Open-loop optimization, unblinded",painVAS,800,532,50.0,42.0,50.0
+P2,"Open-loop optimization, unblinded",MPQtotal,799,531,15.0,12.0,18.0
+P2,"Closed-loop optimization, unblinded",mayoNRS,148,106,5.0,4.0,5.0
+P2,"Closed-loop optimization, unblinded",painVAS,148,106,50.0,44.0,50.0
+P2,"Closed-loop optimization, unblinded",MPQtotal,148,106,14.0,12.0,16.0
+P2,"Closed-loop, double-blind",mayoNRS,104,67,5.0,5.0,5.0
+P2,"Closed-loop, double-blind",painVAS,103,67,50.0,50.0,51.0
+P2,"Closed-loop, double-blind",MPQtotal,103,67,14.0,12.0,16.0
+P2,"Sham, double-blind (0 mA)",mayoNRS,73,47,5.0,5.0,6.0
+P2,"Sham, double-blind (0 mA)",painVAS,73,47,50.0,50.0,55.0
+P2,"Sham, double-blind (0 mA)",MPQtotal,73,47,12.0,12.0,14.0
+P2,Washout + carryover (0 mA),mayoNRS,134,69,5.0,4.0,5.75
+P2,Washout + carryover (0 mA),painVAS,134,69,50.0,45.0,54.75
+P2,Washout + carryover (0 mA),MPQtotal,134,69,14.0,12.0,17.0
+P3,Baseline,mayoNRS,298,47,6.0,5.0,7.0
+P3,Baseline,painVAS,298,47,58.0,50.0,70.0
+P3,Baseline,MPQtotal,298,47,15.0,12.0,18.0
+P3,"Open-loop optimization, unblinded",mayoNRS,777,269,2.0,2.0,3.0
+P3,"Open-loop optimization, unblinded",painVAS,777,269,13.0,9.0,24.0
+P3,"Open-loop optimization, unblinded",MPQtotal,777,269,4.0,3.0,6.0
+P3,"Closed-loop optimization, unblinded",mayoNRS,903,435,2.0,1.0,3.0
+P3,"Closed-loop optimization, unblinded",painVAS,902,435,13.0,8.0,22.0
+P3,"Closed-loop optimization, unblinded",MPQtotal,902,435,3.0,2.0,7.0
+P3,"Closed-loop, double-blind",mayoNRS,54,29,1.0,0.0,2.0
+P3,"Closed-loop, double-blind",painVAS,54,29,7.5,1.25,11.0
+P3,"Closed-loop, double-blind",MPQtotal,54,29,2.0,1.0,3.0
+P3,"Sham, double-blind (0 mA)",mayoNRS,0,0,,,
+P3,"Sham, double-blind (0 mA)",painVAS,0,0,,,
+P3,"Sham, double-blind (0 mA)",MPQtotal,0,0,,,
+P3,Washout + carryover (0 mA),mayoNRS,536,218,2.0,1.0,4.0
+P3,Washout + carryover (0 mA),painVAS,536,218,15.0,9.0,39.25
+P3,Washout + carryover (0 mA),MPQtotal,536,218,4.0,2.0,9.0
+P4,Baseline,mayoNRS,223,57,7.0,6.0,7.0
+P4,Baseline,painVAS,223,57,65.0,59.0,70.0
+P4,Baseline,MPQtotal,223,57,23.0,20.0,26.0
+P4,"Open-loop optimization, unblinded",mayoNRS,1243,440,7.0,6.0,8.0
+P4,"Open-loop optimization, unblinded",painVAS,1243,440,67.0,61.0,73.0
+P4,"Open-loop optimization, unblinded",MPQtotal,1243,440,30.0,25.0,35.0
+P4,"Closed-loop optimization, unblinded",mayoNRS,456,218,7.0,6.0,8.0
+P4,"Closed-loop optimization, unblinded",painVAS,456,218,63.0,57.0,69.0
+P4,"Closed-loop optimization, unblinded",MPQtotal,456,218,31.0,27.0,35.0
+P4,"Closed-loop, double-blind",mayoNRS,137,49,6.0,6.0,7.0
+P4,"Closed-loop, double-blind",painVAS,137,49,59.0,54.0,64.0
+P4,"Closed-loop, double-blind",MPQtotal,137,49,28.0,23.0,31.0
+P4,"Sham, double-blind (0 mA)",mayoNRS,9,4,7.0,6.0,7.0
+P4,"Sham, double-blind (0 mA)",painVAS,9,4,64.0,63.0,66.0
+P4,"Sham, double-blind (0 mA)",MPQtotal,9,4,31.0,27.0,32.0
+P4,Washout + carryover (0 mA),mayoNRS,401,169,7.0,6.0,8.0
+P4,Washout + carryover (0 mA),painVAS,401,169,65.0,59.0,70.0
+P4,Washout + carryover (0 mA),MPQtotal,401,169,30.0,25.0,33.0
+P5,Baseline,mayoNRS,174,60,5.0,4.0,6.0
+P5,Baseline,painVAS,174,60,50.0,44.25,57.0
+P5,Baseline,MPQtotal,174,60,12.0,10.0,16.0
+P5,"Open-loop optimization, unblinded",mayoNRS,376,160,1.0,0.0,3.0
+P5,"Open-loop optimization, unblinded",painVAS,376,160,9.5,1.0,26.0
+P5,"Open-loop optimization, unblinded",MPQtotal,376,160,2.0,0.0,5.0
+P5,"Closed-loop optimization, unblinded",mayoNRS,509,137,0.0,0.0,2.0
+P5,"Closed-loop optimization, unblinded",painVAS,509,137,1.0,1.0,11.0
+P5,"Closed-loop optimization, unblinded",MPQtotal,509,137,0.0,0.0,2.0
+P5,"Closed-loop, double-blind",mayoNRS,308,62,0.0,0.0,1.0
+P5,"Closed-loop, double-blind",painVAS,308,62,1.0,0.0,7.0
+P5,"Closed-loop, double-blind",MPQtotal,308,62,0.0,0.0,2.0
+P5,"Sham, double-blind (0 mA)",mayoNRS,4,4,8.5,6.75,10.0
+P5,"Sham, double-blind (0 mA)",painVAS,1,1,79.0,79.0,79.0
+P5,"Sham, double-blind (0 mA)",MPQtotal,1,1,2.0,2.0,2.0
+P5,Washout + carryover (0 mA),mayoNRS,1014,293,1.0,0.0,2.0
+P5,Washout + carryover (0 mA),painVAS,1012,291,5.0,1.0,13.0
+P5,Washout + carryover (0 mA),MPQtotal,1012,291,2.0,0.0,3.0

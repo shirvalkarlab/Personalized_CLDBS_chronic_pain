@@ -1,0 +1,21 @@
+Time Window,Metric,Num Samples
+one_minute,nrs_s0,66
+one_minute,intensity_vas_s0,66
+one_minute,unpleasantness_vas_s0,66
+one_minute,mood_vas_s0,66
+one_minute,relief_s0,42
+five_minute,nrs_s0,41
+five_minute,intensity_vas_s0,41
+five_minute,unpleasantness_vas_s0,41
+five_minute,mood_vas_s0,41
+five_minute,relief_s0,5
+ten_minute,nrs_s0,42
+ten_minute,intensity_vas_s0,42
+ten_minute,unpleasantness_vas_s0,42
+ten_minute,mood_vas_s0,42
+ten_minute,relief_s0,9
+thirty_minute,nrs_s0,5
+thirty_minute,intensity_vas_s0,5
+thirty_minute,unpleasantness_vas_s0,5
+thirty_minute,mood_vas_s0,5
+thirty_minute,relief_s0,0

@@ -1,0 +1,28 @@
+# Python dependencies for the Shirvalkar et al. 2026 Nature Medicine deposit.
+#
+# These pins are the exact versions used to regenerate every figure and the
+# decoding results in this repository (Python 3.10 or 3.11; the pinned SciPy
+# does not install on 3.12). Install into a fresh
+# virtual environment:
+#
+#     python3 -m venv .venv && source .venv/bin/activate
+#     pip install -r requirements.txt
+#
+# or use the helper: python setup_environment.py
+#
+# Only libraries actually imported by the code here are listed. Everything
+# else (glob, os, json, math, datetime, pickle, subprocess, multiprocessing,
+# argparse, warnings, copy, random) is in the Python standard library.
+
+numpy==1.24.4
+pandas==2.3.3
+scipy==1.10.1
+scikit-learn==1.2.2
+matplotlib==3.10.9
+seaborn==0.13.2
+statsmodels==0.14.6
+h5py==3.16.0
+mplcursors==0.7.1
+pytz==2026.2
+openpyxl==3.1.5
+python-docx==1.1.2

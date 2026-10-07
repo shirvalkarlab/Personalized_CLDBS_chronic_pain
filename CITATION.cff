@@ -1,0 +1,94 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper below."
+title: "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial — code and data deposit"
+type: dataset
+authors:
+  - family-names: Shirvalkar
+    given-names: Prasad
+  - family-names: Leriche
+    given-names: Ryan
+  - family-names: Saal
+    given-names: Jeremy
+  - family-names: Cagle
+    given-names: Jackson
+  - family-names: Prosky
+    given-names: Jordan
+  - family-names: Joseph
+    given-names: Isabella
+  - family-names: Shaughnessy
+    given-names: Ana
+  - family-names: Schmitgen
+    given-names: Ashlyn
+  - family-names: Lin
+    given-names: Joanna
+  - family-names: Motzkin
+    given-names: Julian
+  - family-names: Dawes
+    given-names: Heather
+  - family-names: Racine
+    given-names: Caroline
+  - family-names: Seritan
+    given-names: Andreea
+  - family-names: Sellers
+    given-names: Kristin K.
+  - family-names: deHemptinne
+    given-names: Coralie
+  - family-names: Starr
+    given-names: Philip A.
+  - family-names: Chang
+    given-names: Edward F.
+identifiers:
+  - type: doi
+    value: 10.5061/dryad.b2rbnzsvr
+    description: Dryad data package (forthcoming)
+  - type: other
+    value: NCT04144972
+    description: ClinicalTrials.gov registration
+license: MIT
+license-url: "https://opensource.org/licenses/MIT"
+keywords:
+  - deep brain stimulation
+  - chronic pain
+  - closed-loop neuromodulation
+  - pain biomarker
+  - intracranial electrophysiology
+preferred-citation:
+  type: article
+  title: "Bespoke closed-loop deep brain stimulation for chronic pain: a randomized, double-blind crossover pilot trial"
+  authors:
+    - family-names: Shirvalkar
+      given-names: Prasad
+    - family-names: Leriche
+      given-names: Ryan
+    - family-names: Saal
+      given-names: Jeremy
+    - family-names: Cagle
+      given-names: Jackson
+    - family-names: Prosky
+      given-names: Jordan
+    - family-names: Joseph
+      given-names: Isabella
+    - family-names: Shaughnessy
+      given-names: Ana
+    - family-names: Schmitgen
+      given-names: Ashlyn
+    - family-names: Lin
+      given-names: Joanna
+    - family-names: Motzkin
+      given-names: Julian
+    - family-names: Dawes
+      given-names: Heather
+    - family-names: Racine
+      given-names: Caroline
+    - family-names: Seritan
+      given-names: Andreea
+    - family-names: Sellers
+      given-names: Kristin K.
+    - family-names: deHemptinne
+      given-names: Coralie
+    - family-names: Starr
+      given-names: Philip A.
+    - family-names: Chang
+      given-names: Edward F.
+  journal: "Nature Medicine"
+  year: 2026

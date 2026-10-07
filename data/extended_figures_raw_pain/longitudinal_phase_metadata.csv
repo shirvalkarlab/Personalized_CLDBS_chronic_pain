@@ -1,0 +1,6 @@
+participant,stage1_implant_date,stage3_onset_datetime,endpoint_datetime,endpoint_rule
+P1,2170-09-04,2172-05-26 09:32:52,2174-03-05 09:32:52,3.5 years after Stage 1 implant
+P2,2172-06-11,2174-12-01 13:26:19,2175-07-28 11:02:19,Stage 3 end (last blinded-phase survey)
+P3,2173-09-22,2176-03-12 13:07:44,2178-03-31 10:43:44,Stage 3 end (last blinded-phase survey)
+P4,2175-09-12,2177-12-02 06:08:11,2179-07-05 10:56:11,Stage 3 end (last blinded-phase survey)
+P5,2177-02-26,2178-02-24 13:27:07,2179-12-09 13:27:07,last survey (Stage 3 non-terminal; single-blinded phase continues to end)

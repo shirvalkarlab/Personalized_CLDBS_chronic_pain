@@ -1,0 +1,21 @@
+anat,count,hemisphere
+L ACC,50,left
+L DLPFC,25,left
+L FOP,24,left
+L MFG WM,20,left
+L SFG,19,left
+L S1,19,left
+L Caudate,17,left
+L AINS,15,left
+L Premotor,13,left
+L Parietal,13,left
+R AINS,33,right
+R DLPFC,27,right
+R ACC,24,right
+R Caudate,21,right
+R MFG,21,right
+R Parietal,16,right
+R FOP,14,right
+R IFG WM,12,right
+R ACC WM,12,right
+R SFG,12,right

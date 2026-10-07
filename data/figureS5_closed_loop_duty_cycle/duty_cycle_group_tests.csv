@@ -1,0 +1,16 @@
+statistic,value
+median_gap_percentage_points,27.39304401354261
+permutation_p_one_sided,0.1
+permutation_p_two_sided,0.1
+separation_is_complete,True
+mixed_model_effect_percentage_points,21.243618250928016
+mixed_model_standard_error,7.857290541408836
+mixed_model_p_treating_days_as_independent,0.006857579680403043
+mixed_model_p_between_participants,0.07355639393549708
+intraclass_correlation,0.08165385896923173
+mixed_model_permutation_p_one_sided,0.1
+mixed_model_permutation_p_two_sided,0.2
+firth_odds_ratio_per_10_points,3.3036790712657518
+firth_p,0.21373506436958323
+smallest_attainable_p_one_sided,0.1
+smallest_attainable_p_two_sided,0.1
