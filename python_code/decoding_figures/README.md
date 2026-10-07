@@ -50,7 +50,8 @@ override the root with the `DECODING_FEATURES_ROOT` environment variable)
 **Outputs:** into `decoding_results/P{n}/` — `lasso_*.npy`, `lda_*.npy`, the
 coefficient pickles (`lasso_coef_df.pkl`, `lda_coef_df.pkl`), `count_dict.pkl`, and the
 sample counts `lda_num_samples_per_model.csv` and `regression_num_sample_per_model.csv`.
-01 also fits `mood_vas_s0`; it is not used by any figure.
+01 also fits `mood_vas_s0`; it is not used by any figure. The coefficient pickles
+are not shipped, so 02 and 04 run only after 01.
 
 ---
 

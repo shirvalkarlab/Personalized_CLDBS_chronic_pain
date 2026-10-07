@@ -366,8 +366,10 @@ terminal data.
 ### Pain-decoding significance figures (S1, S2, S3) — `decoding_figures/`
 
 These six numbered scripts must run in order, and are the one Python workflow
-here with that constraint. Scripts `02` and `04` need `01`'s model output;
-scripts `03`, `05` and `06` read the shipped precomputed results and so run
+here with that constraint. Scripts `02` and `04` read the model-coefficient
+files `lasso_coef_df.pkl` and `lda_coef_df.pkl`, which are not shipped; they stop
+with a file-not-found error until `01` has been run for every participant.
+Scripts `03`, `05` and `06` read the shipped precomputed results and so run
 without re-fitting anything. To re-fit from `neural_features/` instead, start at
 `01`:
 
