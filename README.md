@@ -432,7 +432,11 @@ Running the decoding pipeline from these files reproduces the model results
 reported in the paper: the LASSO R² (squared correlation between predicted and reported pain) and the LDA area
 under the curve match the archived results exactly, and the fitted coefficients
 agree to floating-point precision. The permutation-bootstrap significance values
-come from a fixed-seed loop and are likewise reproducible.
+come from a fixed-seed loop and are likewise reproducible. LDA models with fewer
+than 3 surveys in the low- or high-pain group are not fitted and are reported as
+N/A (`MIN_SURVEYS_PER_CLASS` in `01_run_ml_pipeline.py`): leave-one-out training
+then holds a single survey of one group, the covariance is singular, and the AUC
+would depend on rounding error. This applies to 5 P5 models.
 
 **Why survey counts differ across window lengths.** A survey is retained for a
 given window only if it is preceded by enough continuous, artifact-free

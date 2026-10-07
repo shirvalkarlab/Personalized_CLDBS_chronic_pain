@@ -75,6 +75,12 @@ SIZE_LIST = ['one_minute', 'five_minute', 'ten_minute', 'thirty_minute']
 # Number of bootstrap iterations for significance testing
 N_BOOTSTRAP = 1000
 
+# LDA needs at least this many surveys in each pain class. With fewer, a
+# leave-one-out training fold holds a single survey of one class, its covariance
+# is singular, and the AUC is set by rounding error; such models are reported as
+# not estimable (NaN).
+MIN_SURVEYS_PER_CLASS = 3
+
 # Create results directory if needed
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -509,8 +515,16 @@ def run_lda_models(feature_list, label_list, size_list, pain_metrics, save=True)
 
                 print("X SHAPE: ", X.shape)
                 print("Y SHAPE: ", Y.shape)
-                print("CONTINUING")
                 sample_counts[(size, metric)] = {'low': n_low, 'high': n_high}
+
+                if min(n_low, n_high) < MIN_SURVEYS_PER_CLASS:
+                    print("  NOT ESTIMABLE: fewer than "
+                          f"{MIN_SURVEYS_PER_CLASS} surveys in a pain class")
+                    all_aucs.append(np.nan)
+                    all_coefs.append(np.full((1, features.shape[1]), np.nan))
+                    continue
+
+                print("CONTINUING")
 
                 # Leave-one-out cross-validation
                 cv = LeaveOneOut()
