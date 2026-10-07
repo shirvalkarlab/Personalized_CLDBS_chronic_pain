@@ -439,7 +439,7 @@ ax[0].set_title(f"Averaging:{AverageDuration} | Onset:{OnsetDuration+1} | "
                 f"Termination: {OffsetDuration+1}", fontsize=18)
 ax[1].set_title(f"Threshold: {np.round(LDAThreshold)} | "
                 f"Duty Cycle: {np.sum(StimulationState)/len(StimulationState)*100:.2f}%", fontsize=18)
-ax[0].set_xlim([0, len(LDAValues) / 2])
+ax[0].set_xlim([sample_axis[0], sample_axis[-1]])
 fig.savefig(os.path.join(OUTPUT_DIR,
             f"FigureS4_{DEVICE_SIDE}_closed_loop_threshold.pdf"),
             transparent=False, format="pdf")

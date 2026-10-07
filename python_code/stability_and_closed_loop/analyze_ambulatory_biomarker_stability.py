@@ -616,6 +616,10 @@ if USE_MINIMAL_EXTRACT:
     print(f'Loaded {len(PainEpochs)} pain events from {os.path.basename(MINIMAL_EXTRACT_PATH)}')
 
 # %% Building Feature 
+# Recordings with no matching pain survey (ExcelRow -1) cannot be labelled, so
+# they are dropped once here for every cell below.
+PainEpochs = [epoch for epoch in PainEpochs if epoch["ExcelRow"] >= 0]
+
 # Define Threshold used for calculating pain score feature
 Threshold = [30,70]
 
@@ -626,22 +630,17 @@ ChannelName = f"Channel {ChannelOfInterest}"
 PainTimestamp = [epoch["PainTimestamp"] for epoch in PainEpochs]
 
 duration = 300
-SelectedData = [PainEpochs[i] for i in range(len(PainEpochs)) if PainEpochs[i]["Window"] == duration*2]
+SelectedData = [epoch for epoch in PainEpochs if epoch["Window"] == duration*2]
 PowerSpectralDensity = np.zeros((len(Frequency), len(SelectedData)))
 EpochSelection = np.ones(len(SelectedData), dtype=bool)
-PainScore = np.array([Cluster["MPQtotal"][epoch["ExcelRow"]] for epoch in PainEpochs if epoch["Window"] == duration*2]) 
+PainScore = np.array([Cluster["MPQtotal"][epoch["ExcelRow"]] for epoch in SelectedData])
 
-# Loop over all recordings, 
-Counter = 0
-for i in range(len(PainEpochs)):
-    if PainEpochs[i]["Window"] == duration*2:
-
-        # Normalise each PSD by its mean power in 40-80 Hz; a broad band keeps narrow-band
-        # artifacts from influencing the 1/f slope.
-        PowerSpectralDensity[:,Counter] = PainEpochs[i]["PSD"] / np.mean(PainEpochs[i]["PSD"][rangeSelection(Frequency, [40,80])])
-        if np.any(np.isnan(PowerSpectralDensity[:,Counter])):
-            EpochSelection[i] = False
-        Counter += 1
+for Counter, epoch in enumerate(SelectedData):
+    # Normalise each PSD by its mean power in 40-80 Hz; a broad band keeps narrow-band
+    # artifacts from influencing the 1/f slope.
+    PowerSpectralDensity[:,Counter] = epoch["PSD"] / np.mean(epoch["PSD"][rangeSelection(Frequency, [40,80])])
+    if np.any(np.isnan(PowerSpectralDensity[:,Counter])):
+        EpochSelection[Counter] = False
 
 PowerSpectralDensity = PowerSpectralDensity[:,EpochSelection]
 PainScore = PainScore[EpochSelection]
@@ -730,7 +729,7 @@ subAx.plot(Frequency[:200], SPU.smooth(statistic,3), "r", linewidth=2)
 peakIndex = signal.find_peaks(SPU.smooth(AUC[:200],3), distance=25)[0]
 peakIndex = peakIndex[peakIndex<80]
 if len(peakIndex) < 2:
-    peakIndex = np.concatenate((peakIndex, [0]))
+    peakIndex = np.concatenate((peakIndex, np.zeros(2 - len(peakIndex), dtype=int)))
 peakValue = AUC[peakIndex]
 peakOrders = np.flip(np.argsort(np.abs(peakValue)))
 firstPeak = peakIndex[peakOrders[0]]
