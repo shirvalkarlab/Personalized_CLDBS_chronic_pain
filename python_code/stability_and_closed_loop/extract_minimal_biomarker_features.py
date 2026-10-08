@@ -37,8 +37,9 @@ handled under the trial's data-use terms.
 
 SPECTRAL COMPUTATION
 --------------------
-Power is computed with `TimeDomain2PowerChannel` from the Summit RC+S loader in
-`python_code/shared_utilities/`. The stim-ON detection and missing-data
+Power is computed with `TimeDomain2PowerChannel` from the Medtronic Summit RC+S
+loader (`Summit.py`), which is Medtronic proprietary code and is not distributed
+with this deposit. The stim-ON detection and missing-data
 handling match `analyze_ambulatory_biomarker_stability.py` in this folder, so the
 feature files and the stability figure are computed the same way.
 
@@ -124,9 +125,17 @@ SHARED_UTILITIES = os.environ.get("SHARED_UTILITIES", os.path.join(_HERE, os.par
                                                        "shared_utilities"))
 
 # That folder uses package-style imports ("from utility.X import ..."), so put
-# its root on sys.path, then import the Summit loader.
+# its root on sys.path, then import the Summit loader. The loader (Summit.py) is
+# Medtronic proprietary code and is not distributed with this deposit; place it
+# at <SHARED_UTILITIES>/decoder/Summit.py to run this script.
 sys.path.insert(0, os.path.abspath(SHARED_UTILITIES))
-from decoder import Summit   # noqa: E402  (path set above)
+try:
+    from decoder import Summit   # noqa: E402  (path set above)
+except ImportError as error:
+    raise ImportError(
+        "This script needs the Medtronic Summit RC+S loader at "
+        f"{os.path.join(os.path.abspath(SHARED_UTILITIES), 'decoder', 'Summit.py')}, "
+        "which is not distributed with this deposit.") from error
 
 # ---------------------------------------------------------------------------
 # Fixed analysis constants, matching the stability-analysis script

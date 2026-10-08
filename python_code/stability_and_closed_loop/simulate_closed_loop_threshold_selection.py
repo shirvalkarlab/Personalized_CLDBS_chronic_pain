@@ -56,9 +56,10 @@ The figures are written to OUTPUT_DIR.
 
 DEPENDENCIES
 --------------------------------------------------------------------------------
-  The signal-processing, graphing and Summit RC+S loader modules under
-  ../shared_utilities: SignalProcessingUtility, GraphingUtility,
-  PythonUtility and decoder/Summit.
+  The signal-processing and graphing modules under ../shared_utilities:
+  SignalProcessingUtility, GraphingUtility and PythonUtility. The raw-recording
+  path (USE_MINIMAL_EXTRACT=0) also needs the Medtronic Summit RC+S loader,
+  Summit.py, which is Medtronic proprietary code and is not distributed here.
 ================================================================================
 """
 
@@ -114,7 +115,17 @@ from PythonUtility import *             # misc list/array helpers used below
 # to run the dense-stream simulation.
 USE_MINIMAL_EXTRACT = os.environ.get("USE_MINIMAL_EXTRACT", "1") == "1"
 if not USE_MINIMAL_EXTRACT:
-    import Summit                       # Medtronic Summit RC+S data loader (raw recordings only)
+    # The Medtronic Summit RC+S loader (Summit.py) is Medtronic proprietary code
+    # and is not redistributed with this deposit. The raw-recording path needs it
+    # importable as `Summit`; the default per-survey path above does not.
+    try:
+        import Summit                   # Medtronic Summit RC+S data loader (raw recordings only)
+    except ImportError as error:
+        raise ImportError(
+            "USE_MINIMAL_EXTRACT=0 needs the Medtronic Summit RC+S loader "
+            "(Summit.py), which is not distributed with this deposit. Place it at "
+            "python_code/shared_utilities/decoder/Summit.py, or run with "
+            "USE_MINIMAL_EXTRACT=1 (the default).") from error
 
 def load_feature_band_power_from_extract(extract_path, feature_band):
     """Return (feature_power, unix_timestamps) for the closed-loop detector band.

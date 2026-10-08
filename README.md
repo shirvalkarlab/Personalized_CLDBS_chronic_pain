@@ -360,8 +360,10 @@ The raw-recording paths, which cannot run from this deposit, also read
 `neural_data/ambulatory_stages123/*.h5` extracts were produced. It reads the
 continuous Summit recordings and the pain-cluster spreadsheets, which are
 withheld because they carry protected health information, so its `CACHE_ROOT`
-and `CLUSTER_XLSX_DIR` defaults are placeholders. The HDF5 extracts ship as
-terminal data.
+and `CLUSTER_XLSX_DIR` defaults are placeholders. It also needs the Medtronic
+Summit RC+S loader (`Summit.py`), which is Medtronic proprietary code and is
+not distributed here; the raw-recording paths of the S4 and S8 scripts
+(`USE_MINIMAL_EXTRACT=0`) need it too. The HDF5 extracts ship as terminal data.
 
 ### Pain-decoding significance figures (S1, S2, S3) — `decoding_figures/`
 
