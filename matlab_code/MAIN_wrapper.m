@@ -141,7 +141,7 @@ figureS11_handles = plot_figureS11_programming_history(configuration);
 % wrapper — the fit and figure live in Python.
 
 % =======================================================================
-%  EXTENDED DATA FIGURE 1  Longitudinal pain time course, all participants
+%  EXTENDED DATA FIGURE 2  Longitudinal pain time course, all participants
 % =======================================================================
 % Draws the full ambulatory pain record for every participant (P1..P5),
 % stacked on identical axes in the broken-axis style of main Figure 1, with
@@ -151,7 +151,7 @@ figureS11_handles = plot_figureS11_programming_history(configuration);
 % participants. Reads data/extended_figures_raw_pain/. The default measure is
 % the pain intensity VAS; the figure is saved as
 % figures/FigureExtended2_painVAS_timecourse.pdf.
-figureExtended1_handle = plot_pain_timecourse(configuration, "painVAS", ...
+figureExtended2_handle = plot_pain_timecourse(configuration, "painVAS", ...
     ["P1", "P2", "P3", "P4", "P5"]);
 
 % =======================================================================

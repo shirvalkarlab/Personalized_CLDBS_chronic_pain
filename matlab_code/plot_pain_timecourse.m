@@ -373,16 +373,17 @@ for row = 1:numel(participants)
         cutoff_shared = endpoint_shared;
     end
     keep = ch_days <= cutoff_shared;
+    % P5 gave VAS and MPQ on only one of four sham days. When a measure other
+    % than the NRS is plotted, that single sham survey is removed from the
+    % panel -- neither drawn nor smoothed -- and the four rescaled NRS sham
+    % values are drawn instead (added below).
+    if participant == "P5" && measure ~= "mayoNRS"
+        keep = keep & condition ~= "sham";
+    end
     ch_days = ch_days(keep); ch_values = ch_values(keep); condition = condition(keep);
 
     is_crossover = ch_days >= stage3_onset_shared;
     is_sham      = condition == "sham";
-    % P5 gave VAS and MPQ on only one of four sham days. When a measure other
-    % than the NRS is plotted, that single point is suppressed and the four
-    % rescaled NRS sham values are drawn instead (added below).
-    if participant == "P5" && measure ~= "mayoNRS"
-        is_sham = is_sham & false;
-    end
     is_washout   = condition == "washout" & ~is_crossover;   % washouts pre-Stage 3 only
     is_closed    = condition == "closed-loop" & ~is_crossover;
     % Every other chronic survey before Stage 3 is drawn as open-loop.
