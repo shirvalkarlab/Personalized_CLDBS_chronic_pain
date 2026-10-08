@@ -1002,13 +1002,25 @@ image = ax.imshow(AUCs, cmap=colourMap, vmin=0.5, vmax=0.75, origin="lower", asp
                   interpolation="none", extent=(CentreFrequency[0]-0.5, CentreFrequency[-1]+0.5, 0, MonthEdge))
 ax.set_xlim(0, 50)
 ax.set_yticks(np.arange(0, MonthEdge+1, 6))
-ax.set_xlabel("Centre frequency of 5 Hz window (Hz)")
+ax.set_xlabel("Center frequency of 5 Hz window (Hz)")
 ax.set_ylabel("Months since first ambulatory survey")
 ax.set_title(f"{PARTICIPANT_ID} {'Left' if DEVICE_SIDE.endswith('L') else 'Right'}")
 colourBar = fig.colorbar(image, ax=ax)
 colourBar.set_label("AUC, low vs high SF-MPQv2")
 fig.tight_layout()
 fig.savefig(_out(f"FigureS8_{DEVICE_SIDE}.pdf"))
+
+# The same grid, one row per window x frequency, for the nine-panel composite
+# (plot_figureS8_composite.py). Rows without enough surveys keep an empty AUC.
+S8_DATA_DIR = os.environ.get("S8_DATA_DIR", os.path.join(_REPO, "data", "figureS8_biomarker_stability"))
+os.makedirs(S8_DATA_DIR, exist_ok=True)
+pd.DataFrame({
+    "months_included": np.repeat(2 * (np.arange(len(TimeIndex)) + 1), len(CentreFrequency)),
+    "center_frequency_hz": np.tile(CentreFrequency, len(TimeIndex)),
+    "auc": AUCs.ravel(),
+    "n_low_pain": np.repeat(lowData, len(CentreFrequency)),
+    "n_high_pain": np.repeat(highData, len(CentreFrequency)),
+}).to_csv(os.path.join(S8_DATA_DIR, f"{DEVICE_SIDE}_auc_grid.csv"), index=False)
 
 # %% Save Results
 # NOTE: this cell rebuilds spectrograms and uses per-sample stimulation state,

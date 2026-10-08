@@ -183,6 +183,18 @@ which refits the drain model from these tables).
 - `discharge_segments.csv` — one row per battery-discharge segment: `hem`, `patient`, `side`, `t0`/`t1` (segment start/stop), `dur_days`, `n_pts`, `soc_start`/`soc_end` (state-of-charge), `discharge_mAh_per_day`, `teed_J_per_day` (total electrical energy delivered), `eff_duty_frac`, `frac_off`/`frac_open_loop`/`frac_closed_loop`, `streaming_per_day`, `dominant_loop`, `patient_V`, `battery_J_per_day`.
 - `breakeven_duty.csv` — per hemisphere: `E_full_Jday`, `therapy_drain_full_mAhday`, `sensing_overhead_mAhday`, `breakeven_cl_duty` (with `breakeven_lo`/`_hi`), `actual_cl_duty`, and a `status` label (whether closed-loop saves energy at the observed duty cycle). This is also the source table behind Supplementary Table S10.
 
+### figureS8_biomarker_stability/
+
+Figure S8 AUC grids, one CSV per implanted device side
+(`<DEVICE_SIDE>_auc_grid.csv`: P1R, P2L, P2R, P3L, P3R, P4L, P4R, P5L, P5R),
+written by `python_code/stability_and_closed_loop/analyze_ambulatory_biomarker_stability.py`
+and drawn as one figure by `plot_figureS8_composite.py`. One row per window x
+frequency:
+- `months_included` — the window uses every survey from the first this-many months (30-day months) after the first ambulatory survey; steps of 2.
+- `center_frequency_hz` — center of the 5 Hz power window.
+- `auc` — leave-one-out LDA area under the curve, low vs high SF-MPQv2 pain (30th/70th percentiles of all surveys). Empty when the window has fewer than 2 low- or 2 high-pain surveys.
+- `n_low_pain`, `n_high_pain` — surveys in each pain group for that window.
+
 ### figure_ancillary_behavioral/
 
 Baseline (Stage 0 research visits) vs chronic on-therapy ancillary behavioral
