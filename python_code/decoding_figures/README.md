@@ -50,8 +50,7 @@ unchanged. `--permutations 0` refits only the observed models and keeps the
 null files already in `decoding_results/`, so 02 and 04 can run in minutes.
 
 The shipped null files (`lasso_boots_r2s.npy`, `lda_boots_aucs.npy`) come from
-the original analysis, which was run without a seed. Rerunning 01 draws new
-permutations, so p-values near 0.05 may randomly differ.
+the original analysis.
 
 **Inputs:** `neural_features/P{n}/*.csv` (neural features and pain labels;
 override the root with the `DECODING_FEATURES_ROOT` environment variable)

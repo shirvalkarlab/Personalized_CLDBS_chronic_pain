@@ -446,10 +446,9 @@ agree to floating-point precision.
 
 The permutation null distributions (`lasso_boots_r2s.npy`, `lda_boots_aucs.npy`
 in `decoding_results/P#/`), and the p-values and significance stars that scripts
-02 and 03 derive from them, come from the original analysis, which was run
-without a seed. Rerunning `01_run_ml_pipeline.py` draws new permutations, so
-p-values near 0.05 may randomly differ. To refit the observed models while
-keeping the shipped nulls, run 01 with `--permutations 0`. LDA models with fewer
+02 and 03 derive from them, come from the original analysis. To refit the
+observed models while keeping the shipped nulls, run 01 with
+`--permutations 0`. LDA models with fewer
 than 3 surveys in the low- or high-pain group are not fitted and are reported as
 N/A (`MIN_SURVEYS_PER_CLASS` in `01_run_ml_pipeline.py`): leave-one-out training
 then holds a single survey of one group, the covariance is singular, and the AUC

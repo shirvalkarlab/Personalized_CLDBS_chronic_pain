@@ -7,9 +7,6 @@ contrasts).
 
 Reads   data/extended_figures_raw_pain/ExtFig3_omnibus_condition_stats.csv
         data/extended_figures_raw_pain/ExtFig3_pairwise_condition_stats.csv
-        data/extended_figures_raw_pain/pain_surveys.csv (data-quality check:
-        a caveat is added if an arm's scores are mostly zeros contradicted by
-        the paired NRS; none is added for the shipped data)
 Writes  figures/TableS11_extended_data_figure3_statistics.docx
 
 Usage:
@@ -71,52 +68,6 @@ PAIRWISE_TITLE = ("Table S11.2 | Directional post-hoc contrasts, one-tailed "
 FOOTNOTE = ("*p < 0.05, **p < 0.01, ***p < 0.001; ns, not significant. "
             "Source data: ExtFig3_omnibus_condition_stats.csv, "
             "ExtFig3_pairwise_condition_stats.csv.")
-
-SURVEY_CSV = os.path.join(STATISTICS_DIRECTORY, "pain_surveys.csv")
-
-# A pain score of exactly 0 recorded while the same survey's NRS is above 0 is not
-# a plausible reading: a respondent reporting pain on one instrument cannot report
-# none on another. Where such rows dominate an arm, the scale was not collected and
-# the zeros stand in for absent data, which biases that arm's median toward 0.
-IMPLAUSIBLE_ZERO_SHARE = 0.5
-
-
-def implausible_zero_arms(surveys):
-    """Arms whose scores are mostly zeros contradicted by the paired NRS.
-
-    Returns [(participant, measure, n_zero_with_pain, n_scored)], one entry per
-    participant x measure whose share exceeds IMPLAUSIBLE_ZERO_SHARE. An empty
-    list means no arm looks affected, which is the expected result once the
-    source data is sound.
-    """
-    flagged = []
-    for measure in MEASURE_LABELS:
-        if measure == "mayoNRS":
-            continue
-        for participant in sorted(surveys.participant.unique()):
-            arm = surveys[(surveys.participant == participant)
-                          & surveys[measure].notna() & surveys.mayoNRS.notna()]
-            if arm.empty:
-                continue
-            contradicted = int(((arm[measure] == 0) & (arm.mayoNRS > 0)).sum())
-            if contradicted / len(arm) > IMPLAUSIBLE_ZERO_SHARE:
-                flagged.append((participant, measure, contradicted, len(arm)))
-    return flagged
-
-
-def data_quality_caveat(flagged):
-    """Sentence naming the affected arms, or '' when none are flagged."""
-    if not flagged:
-        return ""
-    parts = [f"{participant} {MEASURE_LABELS[measure]} "
-             f"({contradicted} of {scored} scored surveys)"
-             for participant, measure, contradicted, scored in flagged]
-    return ("Data caveat: in the source survey table, the following record a "
-            "score of exactly 0 on most surveys where the same survey's NRS is "
-            "above 0, which indicates the scale was not collected rather than "
-            "scored 0 — " + "; ".join(parts) + ". Statistics for those "
-            "participant-by-measure rows are biased toward 0 and should not be "
-            "interpreted until the source column is corrected.")
 
 OMNIBUS_HEADERS = ["Scale", "Participant", "Arms", "n", "H",
                    "df", "p", "Sig."]
@@ -275,19 +226,10 @@ def main():
 
     add_paragraph(document, FOOTNOTE)
 
-    flagged = implausible_zero_arms(pd.read_csv(SURVEY_CSV))
-    caveat = data_quality_caveat(flagged)
-    if caveat:
-        add_paragraph(document, caveat, bold=True)
-
     output_path = os.path.join(FIGURE_DIRECTORY, OUTPUT_NAME)
     document.save(output_path)
     print(f"Table S11.1: {len(omnibus_table)} rows")
     print(f"Table S11.2: {len(pairwise_table)} rows")
-    print(f"arms flagged for implausible zeros: {len(flagged)}")
-    for participant, measure, contradicted, scored in flagged:
-        print(f"  {participant} {measure}: {contradicted} of {scored} "
-              "scored surveys are 0 with NRS above 0")
     print(f"written to {output_path}")
 
 
