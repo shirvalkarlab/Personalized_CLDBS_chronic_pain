@@ -23,8 +23,8 @@ Implanted-cohort figures (Fig 4, Fig 5, ambulatory) cover P1–P5. Fig 2 covers 
 ## Reading the tables
 Each row gives the item, the language it is written in, the script that produces
 it, and the data that script reads. A row with an em-dash in those columns is a
-published item that no script here produces — anatomical renderings,
-adverse-event summaries, and wearable step counts are assembled separately.
+published item that no script here produces — anatomical renderings and
+adverse-event summaries are assembled separately.
 
 ## MAIN figures
 | ID | Title | Language | Code | Data source |
@@ -53,7 +53,7 @@ adverse-event summaries, and wearable step counts are assembled separately.
 | Ext Data Fig 2 | Longitudinal pain time course, all five implanted participants (Figure-1 broken-axis style: baseline / Stage 0 / chronic panels derived in the plotter from `stage`; condition-coloured dots, thin-plus washouts, hollow-circle shams, per-panel moving average; measure-selectable by scale column, default painVAS) | MATLAB | matlab_code/plot_pain_timecourse.m | data/extended_figures_raw_pain/pain_surveys.csv, longitudinal_phase_metadata.csv |
 | Ext Data Fig 3 | Raw pain-score distributions, all participants (violin + raw swarm; NRS, intensity VAS, MPQ total; six stimulation arms, with directional one-tailed statistics on the closed-loop double-blind arm). Also writes a reduced version omitting open-loop optimization | PYTHON | python_code/plot_extended_figure3_raw_distributions.py | data/extended_figures_raw_pain/pain_surveys.csv |
 | Ext Data Fig 4 a/b/c | Construct-score schematic (a); symptom domains baseline vs chronic (b); MCID responders by measure (c) | PYTHON | python_code/plot_extended_figure4_ancillary.py | data/figure_ancillary_behavioral/ancillary_scores_long.csv |
-| Ext Data Fig 4 d | Mean daily step count from the wearable device | — | — | — |
+| Ext Data Fig 4 d | Percent change in daily step count from baseline, closed-loop vs sham days (P1, P2, P4) | PYTHON | python_code/plot_extended_figure4_ancillary.py | data/figure5_double_blind_outcomes/double_blind_outcomes.xlsx (sheet daily) |
 
 ## SUPPLEMENTARY figures
 | ID | Title | Language | Code | Data source |

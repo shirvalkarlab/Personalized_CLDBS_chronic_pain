@@ -52,7 +52,7 @@ printed article.
 [`docs/FIGURE_INVENTORY.md`](docs/FIGURE_INVENTORY.md) lists every figure and
 table in the article, the script that produces it, and the data that script
 reads. Items with an em-dash there are published panels no script here produces
-(anatomical renderings, adverse-event summaries, wearable step counts);
+(anatomical renderings, adverse-event summaries);
 Extended Data Figure 1 is one of them.
 
 Figures are written into `figures/` as PDF; Figures 1, 5f, S5 and Extended
@@ -215,7 +215,7 @@ Every Python-generated figure, its script, and the data it reads:
 | 5d–e | `plot_figure5_ancillary_main.py` | `figure_ancillary_behavioral/ancillary_scores_long.csv` |
 | 5f | `plot_figure5f_blinding_guess.py` | `figure5_double_blind_outcomes/double_blind_outcomes.xlsx` (sheet `stim_guess`) |
 | Extended Data 3 | `plot_extended_figure3_raw_distributions.py` | `extended_figures_raw_pain/pain_surveys.csv` |
-| Extended Data 4 a–c | `plot_extended_figure4_ancillary.py` | `figure_ancillary_behavioral/ancillary_scores_long.csv` |
+| Extended Data 4 a–d | `plot_extended_figure4_ancillary.py` | `figure_ancillary_behavioral/ancillary_scores_long.csv` (a–c), `figure5_double_blind_outcomes/double_blind_outcomes.xlsx`, sheet `daily` (d) |
 | S1, S2, S3 | `decoding_figures/` — six numbered scripts, see below | `neural_features/` (or the shipped `decoding_results/`) |
 | S4 | `stability_and_closed_loop/simulate_closed_loop_threshold_selection.py` | `neural_data/ambulatory_stages123/P3L_ambulatory_features.h5` |
 | S5 a, b | `plot_figureS5_closed_loop_duty_cycle.py` | `figureS5_closed_loop_duty_cycle/blinded_daily_duty_cycle.csv` (panel a); `figureS11_programming_history/` (stimulation parameters, daily duty cycle, sham windows) and `figures/ExtendedDataTable2_all_pain_scales_closed_loop_vs_sham.csv` (panel b, responder status) |
@@ -297,7 +297,7 @@ cd python_code
 python plot_figure5_ancillary_main.py              # Figure 5d–e
 python plot_figure5f_blinding_guess.py             # Figure 5f
 python plot_extended_figure3_raw_distributions.py  # Extended Data Figure 3
-python plot_extended_figure4_ancillary.py          # Extended Data Figure 4a–c
+python plot_extended_figure4_ancillary.py          # Extended Data Figure 4a–d
 python plot_figureS5_closed_loop_duty_cycle.py     # Figure S5
 python plot_figureS6_battery_efficiency.py         # Figure S6
 ```

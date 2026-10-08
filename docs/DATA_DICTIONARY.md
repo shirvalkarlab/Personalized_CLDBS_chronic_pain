@@ -109,10 +109,10 @@ Each participant's prospective index metric is not a column in this file; it is
 declared in `plot_figure5_double_blind_outcomes.m`, which names the
 `baseline_percent_diff_*` column to use for each of P1–P5.
 
-**`double_blind_outcomes.xlsx`** — summary workbook with three sheets; only
-`stim_guess` is read by the code:
+**`double_blind_outcomes.xlsx`** — summary workbook with three sheets; `daily` and
+`stim_guess` are read by the code:
 - `[summary]` `stim_group`, `mean_pain`, `SEM_pain_sem` — group mean pain and its standard error. Not read by the code.
-- `[daily]` `pt_id`, `stim_group`, `pain`, `steps`, `duty cycle` — per-participant daily pain, Fitbit step count, and closed-loop duty cycle, by stimulation group (closed-loop, sham, and 46 P3 washout (0 mA) rows). Not read by the code; the model reads `cohort_daily_percent_change.csv`.
+- `[daily]` `pt_id`, `stim_group`, `pain`, `steps`, `duty cycle` — per-participant daily pain, Fitbit step count, and closed-loop duty cycle, by stimulation group (closed-loop, sham, and 46 P3 washout (0 mA) rows). `steps` is the percent change in that day's Fitbit step count from the participant's pre-trial baseline; it has values for P1, P2 and P4 only (205 closed-loop or sham days). Only `steps` is read, by `python_code/plot_extended_figure4_ancillary.py` (Extended Data Figure 4d: a one-sided two-sample t-test pooling the closed-loop and sham days of all three participants, and per-participant contrasts); the Figure 5 model reads `cohort_daily_percent_change.csv`.
 - `[stim_guess]` `pt_id`, `ground_truth`, `pt_guess`, `percent_guessed` — how often each participant guessed each condition during the blinded period. Plotted by `python_code/plot_figure5f_blinding_guess.py` (Figure 5f), which also runs the blinding tests.
 
 ### figureS7_acute_predicts_chronic/
@@ -188,7 +188,7 @@ which refits the drain model from these tables).
 Baseline (Stage 0 research visits) vs chronic on-therapy ancillary behavioral
 questionnaire scores. Feeds both `python_code/plot_figure5_ancillary_main.py`
 (main Figure 5 d/e) and `python_code/plot_extended_figure4_ancillary.py`
-(Extended Data Figure 4 a/b/c).
+(Extended Data Figure 4 a–c; panel d reads `figure5_double_blind_outcomes/double_blind_outcomes.xlsx`).
 
 This CSV is the raw ancillary-score data (one row per completed survey) and is
 the source both plotters read. Baseline rows were assembled from the study's
