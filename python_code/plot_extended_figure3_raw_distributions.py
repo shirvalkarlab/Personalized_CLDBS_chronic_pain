@@ -146,9 +146,11 @@ def load_surveys():
 
     surveys = surveys.assign(day=pd.to_datetime(surveys.time).dt.date)
 
-    # The arms must partition the surveys they claim. A survey in two arms would
-    # be drawn twice; one in none would vanish without the figure changing
-    # shape. Both are silent failures, so both are checked here.
+    # No survey may be in two arms: it would be drawn twice without the figure
+    # changing shape, a silent failure, so overlaps are checked here. Surveys
+    # in no arm are left out on purpose: the Stage 0 inpatient surveys and the
+    # pre-implant surveys outside the baseline window (1,236 and 299 of the
+    # 11,986 surveys in the shipped data).
     for participant in PARTICIPANTS:
         selected = [set(select_arm(surveys, participant, arm).index)
                     for arm in ALL_ARMS]
