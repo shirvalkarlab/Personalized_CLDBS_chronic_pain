@@ -106,13 +106,17 @@ docs/                   Figure inventory and data dictionary
 Statistics and Machine Learning Toolbox (for `fitlme`, `ranksum`, `bootci`) are sufficient.
 
 **Python.** Python 3.10 or 3.11 (the pinned SciPy does not install on 3.12), with dependencies pinned in
-`python_code/requirements.txt`. Run the setup script once, which creates a
-virtual environment in `python_code/.venv` and installs the pinned versions:
+`python_code/requirements.txt`. Run the setup script once, with any Python 3 you
+have. It finds a Python 3.10 or 3.11 on your computer, or, if there is none,
+downloads Python 3.11 with [uv](https://docs.astral.sh/uv/) (into uv's own
+folder, leaving your other Pythons untouched). It then creates a virtual
+environment in `python_code/.venv`, installs the pinned versions, and checks
+that every installed version matches `requirements.txt`:
 
 ```bash
 cd python_code
-python3 setup_environment.py
-source .venv/bin/activate
+python3 setup_environment.py        # Windows: py setup_environment.py
+source .venv/bin/activate           # Windows: .venv\Scripts\activate
 ```
 
 Or do the same by hand:
