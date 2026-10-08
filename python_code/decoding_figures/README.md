@@ -42,6 +42,17 @@ Runs LASSO regression and LDA classification with:
 - Leave-one-out cross-validation
 - Permutation testing (feature rows shuffled against the labels, 1000 permutations)
 
+The permutation nulls run on all but two CPU cores (`--workers N` to change this).
+The LDA null uses a batched closed form of scikit-learn's
+`LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')`, which gives the
+same AUCs much faster; the LASSO null re-runs the scikit-learn models
+unchanged. `--permutations 0` refits only the observed models and keeps the
+null files already in `decoding_results/`, so 02 and 04 can run in minutes.
+
+The shipped null files (`lasso_boots_r2s.npy`, `lda_boots_aucs.npy`) come from
+the original analysis, which was run without a seed. Rerunning 01 draws new
+permutations, so p-values near 0.05 may randomly differ.
+
 **Inputs:** `neural_features/P{n}/*.csv` (neural features and pain labels;
 override the root with the `DECODING_FEATURES_ROOT` environment variable)
 **Outputs:** into `decoding_results/P{n}/` — `lasso_*.npy`, `lda_*.npy`, the
@@ -121,6 +132,15 @@ Each script has a configuration section at the top where you can change:
 - `PARTICIPANT_LABEL` or `ALL_PARTICIPANTS`: which participant(s) to process (e.g. `"P3"`)
 - directory paths (or set `DECODING_FEATURES_ROOT` / `DECODING_RESULTS_ROOT`)
 - analysis parameters (significance threshold, number of top features, and so on)
+
+## Tests
+
+`tests/` pins the LDA class split and counts to their published values and
+checks the batched LDA against scikit-learn:
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ## Dependencies
 

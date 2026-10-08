@@ -1,6 +1,22 @@
 import os
+
+# One linear-algebra thread per process. The permutation nulls run one process
+# per worker; letting each process also start one thread per core
+# oversubscribes the machine (one P5 permutation round took 603 s with 16
+# threads and 105 s with one). Set these variables yourself to override.
+# They must be set before numpy is imported.
+for _thread_variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS",
+                         "MKL_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
+    os.environ.setdefault(_thread_variable, "1")
+
+import contextlib
+import io
+import multiprocessing
 import pickle
 import random
+import sys
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from random import shuffle
 from datetime import datetime
 
@@ -9,6 +25,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+from scipy.special import expit
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Lasso
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -42,6 +59,13 @@ _parser = argparse.ArgumentParser(description="Fit LASSO + LDA pain-decoding mod
 _parser.add_argument("--participant", "-p", default=os.environ.get("DECODING_PARTICIPANT", _DEFAULT_PARTICIPANT),
                      choices=["P1", "P2", "P3", "P4", "P5"],
                      help="De-identified participant label (P1-P5). Default: %(default)s")
+_parser.add_argument("--permutations", type=int, default=1000,
+                     help="Permutations in each null distribution. 0 skips the nulls and "
+                          "keeps the null files already in the results folder. Default: %(default)s")
+# Two cores are left free by default so the machine stays usable during a run.
+_parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 1) - 2),
+                     help="Processes used for the permutation nulls. "
+                          "Default: two fewer than the CPU cores (%(default)s)")
 # parse_known_args so the script still runs inside notebooks/other launchers.
 _args, _ = _parser.parse_known_args()
 PARTICIPANT_LABEL = _args.participant
@@ -72,8 +96,14 @@ PAIN_METRICS = ['nrs_s0', 'intensity_vas_s0', 'unpleasantness_vas_s0',
 # Time windows
 SIZE_LIST = ['one_minute', 'five_minute', 'ten_minute', 'thirty_minute']
 
-# Number of bootstrap iterations for significance testing
-N_BOOTSTRAP = 1000
+# Number of permutations in each null distribution (the output files keep their
+# historical "boots" names, but the null is a permutation test).
+N_PERMUTATIONS = _args.permutations
+N_WORKERS = max(1, _args.workers)
+
+# Permutations handed to a worker process at a time.
+LASSO_PERMUTATIONS_PER_TASK = 10
+LDA_PERMUTATIONS_PER_TASK = 25
 
 # LDA needs at least this many surveys in each pain class. With fewer, a
 # leave-one-out training fold holds a single survey of one class, its covariance
@@ -611,66 +641,231 @@ def run_lda_models(feature_list, label_list, size_list, pain_metrics, save=True)
 
 
 # =============================================================================
-# BOOTSTRAP SIGNIFICANCE TESTING
+# PERMUTATION NULL DISTRIBUTIONS
 # =============================================================================
+#
+# Each permutation shuffles every time window's feature rows against the pain
+# labels and re-runs all 20 models, giving one null score per model. The
+# permutations are independent, so they run in parallel worker processes.
+#
+# LASSO: each permutation re-runs run_lasso_models() unchanged.
+#
+# LDA: each permutation is scored with lda_loo_aucs(), a batched closed form of
+# LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto') evaluated by
+# leave-one-out. It computes the same model as scikit-learn without the
+# features x features matrix solve that dominates scikit-learn's run time, and
+# scores many permutations at once. On the shipped data it reproduces every
+# observed AUC of run_lda_models() exactly (tests/test_permutation_null.py
+# checks it against scikit-learn).
 
-def run_bootstrap_lasso(feature_list, label_list, size_list, pain_metrics, n_bootstrap):
+def draw_permutation_orders(feature_list, n_permutations):
     """
-    Run bootstrap permutation testing for LASSO models.
+    Draw the feature-row order of every permutation up front.
 
-    Shuffles features to break feature-label relationship, establishing
-    a null distribution for R² values.
+    The same random.shuffle calls are made in the same order as a serial loop
+    over permutations would make, so the permutations do not depend on how many
+    worker processes later score them.
 
     Returns:
-        Array of shape (n_bootstrap, n_models) with permuted R² values
+        List of n_permutations lists, each holding one row order per time window
     """
-    boots_r2s = []
-
-    for iteration in range(n_bootstrap):
-        print(iteration)
-
-        # Shuffle each time window's features independently
-        shuffled_features = []
+    orders = []
+    for _ in range(n_permutations):
+        per_window = []
         for features in feature_list:
             idx = list(range(len(features)))
             shuffle(idx)
-            shuffled_features.append(features.iloc[idx, :])
-
-        # Run LASSO without saving
-        _, all_r2 = run_lasso_models(shuffled_features, label_list, size_list,
-                                      pain_metrics, save=False)
-        boots_r2s.append(all_r2)
-
-    return np.array(boots_r2s)
+            per_window.append(idx)
+        orders.append(per_window)
+    return orders
 
 
-def run_bootstrap_lda(feature_list, label_list, size_list, pain_metrics, n_bootstrap):
+_LDA_SCALE_FLOOR = 10 * np.finfo(np.float64).eps   # StandardScaler treats smaller scales as 1
+
+
+def _lda_class_terms(X):
     """
-    Run bootstrap permutation testing for LDA models.
+    Pieces of scikit-learn's Ledoit-Wolf class covariance for a batch of classes.
 
-    Shuffles features to break feature-label relationship, establishing
-    a null distribution for AUC values.
+    For X of shape (K, m, p) -- K independent sets of m samples -- scikit-learn's
+    _cov(X, shrinkage='auto') standardizes each feature, applies Ledoit-Wolf
+    shrinkage s toward mu times the identity, and rescales. The result equals
+    (1 - s) / m * Zt' Zt + s * mu * diag(scale**2), where Zt is the centred data.
 
     Returns:
-        Array of shape (n_bootstrap, n_models) with permuted AUC values
+        mean (K, p), Zt (K, m, p), s (K,), mu (K,), scale (K, p)
     """
-    boots_aucs = []
+    _, m, p = X.shape
+    mean = X.mean(axis=1)
+    centred = X - mean[:, None, :]
+    scale = np.sqrt((centred ** 2).mean(axis=1))
+    scale[scale < _LDA_SCALE_FLOOR] = 1.0
+    standardized = centred / scale[:, None, :]
+    standardized = standardized - standardized.mean(axis=1, keepdims=True)  # ledoit_wolf re-centres
 
-    for iteration in range(n_bootstrap):
+    squared = standardized ** 2
+    emp_cov_trace = squared.sum(axis=1) / m
+    mu = emp_cov_trace.sum(axis=1) / p
+    beta_ = (squared.sum(axis=2) ** 2).sum(axis=1)
+    gram = standardized @ standardized.transpose(0, 2, 1)
+    delta_ = (gram ** 2).sum(axis=(1, 2)) / m ** 2
+    beta = (beta_ / m - delta_) / (p * m)
+    delta = (delta_ - 2.0 * mu * emp_cov_trace.sum(axis=1) + p * mu ** 2) / p
+    beta = np.minimum(beta, delta)
+    s = np.where(beta == 0, 0.0, beta / np.where(delta == 0, 1.0, delta))
+    return mean, standardized * scale[:, None, :], s, mu, scale
 
-        # Shuffle each time window's features independently
-        shuffled_features = []
-        for features in feature_list:
-            idx = list(range(len(features)))
-            shuffle(idx)
-            shuffled_features.append(features.iloc[idx, :])
 
-        # Run LDA without saving
-        _, all_aucs = run_lda_models(shuffled_features, label_list, size_list,
-                                      pain_metrics, save=False)
-        boots_aucs.append(all_aucs)
+def _lda_decision(train_low, train_high, test):
+    """
+    Decision value of a two-class LDA (solver='lsqr', shrinkage='auto') for a batch.
 
-    return np.array(boots_aucs)
+    The pooled covariance is a diagonal matrix plus U'U, with U the stacked,
+    weighted, centred training samples, so the Woodbury identity replaces the
+    features x features solve with a samples x samples one.
+
+    Args:
+        train_low: (K, m0, p) low-pain training samples of K independent fits
+        train_high: (K, m1, p) high-pain training samples
+        test: (K, p) one held-out sample per fit
+
+    Returns:
+        (K,) decision values; scikit-learn's predict_proba is expit() of these
+    """
+    m0, m1 = train_low.shape[1], train_high.shape[1]
+    priors = np.array([m0, m1], dtype=float) / (m0 + m1)
+    terms = [_lda_class_terms(train_low), _lda_class_terms(train_high)]
+    diagonal = sum(priors[c] * terms[c][2][:, None] * terms[c][3][:, None] * terms[c][4] ** 2
+                   for c in range(2))
+    U = np.concatenate([np.sqrt(priors[c] * (1 - terms[c][2]) / (m0, m1)[c])[:, None, None] * terms[c][1]
+                        for c in range(2)], axis=1)
+    means = np.stack([terms[0][0], terms[1][0]], axis=2)              # (K, p, 2)
+
+    inverse_diagonal = 1.0 / diagonal
+    scaled_means = inverse_diagonal[:, :, None] * means
+    scaled_U = U * inverse_diagonal[:, None, :]
+    capacitance = np.eye(U.shape[1])[None] + scaled_U @ U.transpose(0, 2, 1)
+    coef = scaled_means - scaled_U.transpose(0, 2, 1) @ np.linalg.solve(capacitance, U @ scaled_means)
+
+    intercept = -0.5 * np.einsum("kpc,kpc->kc", means, coef) + np.log(priors)[None, :]
+    return (np.einsum("kp,kp->k", test, coef[:, :, 1] - coef[:, :, 0])
+            + intercept[:, 1] - intercept[:, 0])
+
+
+def lda_loo_decisions(X, y):
+    """
+    Leave-one-out decision values of LDA(solver='lsqr', shrinkage='auto').
+
+    Args:
+        X: (K, n, p) features of K data sets that share the labels y
+        y: (n,) labels, 0 = low pain, 1 = high pain
+
+    Returns:
+        (K, n) held-out decision value of every sample in every data set
+    """
+    n_sets, n = X.shape[0], X.shape[1]
+    decisions = np.empty((n_sets, n))
+    for i in range(n):
+        train = np.arange(n) != i
+        decisions[:, i] = _lda_decision(X[:, train & (y == 0)], X[:, train & (y == 1)], X[:, i])
+    return decisions
+
+
+def lda_loo_aucs(X, y):
+    """Leave-one-out AUC, rounded to 3 decimals as in run_lda_models(), for each of K data sets."""
+    probabilities = expit(lda_loo_decisions(X, y))
+    return np.array([np.round(roc_auc_score(y, probabilities[k]), 3)
+                     for k in range(X.shape[0])])
+
+
+# Data each worker process scores permutations against (set by _init_null_worker).
+_NULL_FEATURES = None
+_NULL_LABELS = None
+
+
+def _init_null_worker(feature_list, label_list):
+    global _NULL_FEATURES, _NULL_LABELS
+    _NULL_FEATURES, _NULL_LABELS = feature_list, label_list
+    # Shuffled feature rows make pandas warn on every boolean selection.
+    warnings.filterwarnings("ignore", category=UserWarning)
+
+
+def _lasso_null_task(orders):
+    """Null R² of every LASSO model for each permutation in orders."""
+    scores = []
+    for order in orders:
+        shuffled = [features.iloc[idx, :] for features, idx in zip(_NULL_FEATURES, order)]
+        with contextlib.redirect_stdout(io.StringIO()):
+            _, r2s = run_lasso_models(shuffled, _NULL_LABELS, SIZE_LIST, PAIN_METRICS, save=False)
+        scores.append(r2s)
+    return np.array(scores, dtype=float)
+
+
+def _lda_null_task(orders):
+    """Null AUC of every LDA model for each permutation in orders."""
+    scores = np.full((len(orders), len(SIZE_LIST) * len(PAIN_METRICS)), np.nan)
+    column = 0
+    for window, (features, labels) in enumerate(zip(_NULL_FEATURES, _NULL_LABELS)):
+        for metric in PAIN_METRICS:
+            # Prepare each permutation exactly as run_lda_models() does, then
+            # score together the permutations that share one label vector.
+            groups = {}
+            for k, order in enumerate(orders):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    X, y, n_low, n_high, success = prepare_classification_data(
+                        features.iloc[order[window], :].copy(), labels.copy(), metric)
+                if not success or min(n_low, n_high) < MIN_SURVEYS_PER_CLASS:
+                    continue
+                key = y.tobytes()
+                groups.setdefault(key, (y, [], []))
+                groups[key][1].append(k)
+                groups[key][2].append(X)
+            for y, rows, matrices in groups.values():
+                scores[rows, column] = lda_loo_aucs(np.stack(matrices).astype(float), y)
+            column += 1
+    return scores
+
+
+def run_permutation_null(task, orders, per_task, feature_list, label_list, n_workers, name):
+    """
+    Score every permutation in orders with task(), in parallel, in order.
+
+    Returns:
+        Array of shape (n_permutations, n_models)
+    """
+    # Smaller tasks when there are few permutations, so every worker gets some.
+    per_task = max(1, min(per_task, -(-len(orders) // n_workers)))
+    chunks = [orders[i:i + per_task] for i in range(0, len(orders), per_task)]
+    results = [None] * len(chunks)
+    started = time.time()
+    done = 0
+
+    def report():
+        elapsed = time.time() - started
+        remaining = elapsed / done * (len(orders) - done)
+        print(f"  {name} null: {done}/{len(orders)} permutations, "
+              f"{elapsed / 60:.1f} min elapsed, about {remaining / 60:.1f} min left")
+
+    if n_workers == 1:
+        _init_null_worker(feature_list, label_list)
+        for j, chunk in enumerate(chunks):
+            results[j] = task(chunk)
+            done += len(chunk)
+            report()
+    else:
+        # "spawn" starts each worker fresh on every platform, so each picks up
+        # the one-thread setting at the top of this script.
+        with ProcessPoolExecutor(max_workers=n_workers,
+                                 mp_context=multiprocessing.get_context("spawn"),
+                                 initializer=_init_null_worker,
+                                 initargs=(feature_list, label_list)) as pool:
+            futures = {pool.submit(task, chunk): j for j, chunk in enumerate(chunks)}
+            for future in as_completed(futures):
+                j = futures[future]
+                results[j] = future.result()
+                done += len(chunks[j])
+                report()
+    return np.vstack(results)
 
 
 # =============================================================================
@@ -678,6 +873,8 @@ def run_bootstrap_lda(feature_list, label_list, size_list, pain_metrics, n_boots
 # =============================================================================
 
 if __name__ == "__main__":
+    # Print each line as it happens, also when output goes to a log file.
+    sys.stdout.reconfigure(line_buffering=True)
     print(f"\n{'#'*60}")
     print(f"  BIOMARKER DECODING PIPELINE - {PARTICIPANT_LABEL}")
     print(f"{'#'*60}")
@@ -714,14 +911,21 @@ if __name__ == "__main__":
         feature_list, label_list, SIZE_LIST, PAIN_METRICS)
 
     # -------------------------------------------------------------------------
-    # STEP 3: Bootstrap significance testing for LASSO
+    # STEP 3: Permutation null for LASSO
     # -------------------------------------------------------------------------
-    print("\n[STEP 3] Running LASSO bootstrap permutation testing...")
-    boots_r2s = run_bootstrap_lasso(
-        feature_list, label_list, SIZE_LIST, PAIN_METRICS, N_BOOTSTRAP)
-
-    np.save(RESULTS_DIR + 'lasso_boots_r2s.npy', boots_r2s)
-    print(f"  Saved bootstrap R² distributions to: {RESULTS_DIR}lasso_boots_r2s.npy")
+    # The LASSO orders are drawn here and the LDA orders in step 5, in the
+    # order a serial loop would draw them.
+    lasso_orders = draw_permutation_orders(feature_list, N_PERMUTATIONS)
+    if N_PERMUTATIONS > 0:
+        print(f"\n[STEP 3] LASSO permutation null: {N_PERMUTATIONS} permutations "
+              f"on {N_WORKERS} worker processes...")
+        boots_r2s = run_permutation_null(
+            _lasso_null_task, lasso_orders, LASSO_PERMUTATIONS_PER_TASK,
+            feature_list, label_list, N_WORKERS, "LASSO")
+        np.save(RESULTS_DIR + 'lasso_boots_r2s.npy', boots_r2s)
+        print(f"  Saved permutation R² distributions to: {RESULTS_DIR}lasso_boots_r2s.npy")
+    else:
+        print("\n[STEP 3] Skipped (--permutations 0); keeping the existing lasso_boots_r2s.npy")
 
     # -------------------------------------------------------------------------
     # STEP 4: Run LDA classification
@@ -731,14 +935,19 @@ if __name__ == "__main__":
         feature_list, label_list, SIZE_LIST, PAIN_METRICS)
 
     # -------------------------------------------------------------------------
-    # STEP 5: Bootstrap significance testing for LDA
+    # STEP 5: Permutation null for LDA
     # -------------------------------------------------------------------------
-    print("\n[STEP 5] Running LDA bootstrap permutation testing...")
-    boots_aucs = run_bootstrap_lda(
-        feature_list, label_list, SIZE_LIST, PAIN_METRICS, N_BOOTSTRAP)
-
-    np.save(RESULTS_DIR + 'lda_boots_aucs.npy', boots_aucs)
-    print(f"  Saved bootstrap AUC distributions to: {RESULTS_DIR}lda_boots_aucs.npy")
+    lda_orders = draw_permutation_orders(feature_list, N_PERMUTATIONS)
+    if N_PERMUTATIONS > 0:
+        print(f"\n[STEP 5] LDA permutation null: {N_PERMUTATIONS} permutations "
+              f"on {N_WORKERS} worker processes...")
+        boots_aucs = run_permutation_null(
+            _lda_null_task, lda_orders, LDA_PERMUTATIONS_PER_TASK,
+            feature_list, label_list, N_WORKERS, "LDA")
+        np.save(RESULTS_DIR + 'lda_boots_aucs.npy', boots_aucs)
+        print(f"  Saved permutation AUC distributions to: {RESULTS_DIR}lda_boots_aucs.npy")
+    else:
+        print("\n[STEP 5] Skipped (--permutations 0); keeping the existing lda_boots_aucs.npy")
 
     # -------------------------------------------------------------------------
     # DONE

@@ -22,3 +22,8 @@ neural_data/ambulatory_stages123_rebuilt/
 #
 # Scripts 01-06 overwrite those files in place when re-run, so there is no
 # separate generated-output directory to exclude.
+
+# Planning notes from analysis sessions (not part of the deposit)
+task_plan.md
+findings.md
+progress.md
