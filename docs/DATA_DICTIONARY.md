@@ -50,8 +50,56 @@ six files per participant are provided as data.
   contact labels that index the model outputs.
 - `P#_inpatient_feature_counts.xlsx` — decoding feature counts by anatomy;
   Figure 3d shows P3.
+
+**Columns.** Each participant has 20 candidate models, one for each pairing of a
+recording window (`size_org`: `one_minute`, `five_minute`, `ten_minute`,
+`thirty_minute`) with a pain scale (`metric_org`: `nrs_s0`, `intensity_vas_s0`,
+`unpleasantness_vas_s0`, `mood_vas_s0`, `relief_s0`; see "Decoding targets" under
+Neural spectral features below). Every model was scored by leave-one-out
+cross-validation. A column headed `Unnamed: 0` holds row numbers only.
+
+- `P#_lasso_across_models.xlsx`, `P#_lda_across_models.xlsx` — one row per model:
+  - `size_org`, `metric_org` — the recording window and the pain scale.
+  - `Num Samples` (LASSO) — number of pain reports used.
+  - `Low Pain Samples`, `High Pain Samples`, `Total Used` (LDA) — reports at or
+    below the participant's 30th percentile, reports at or above the 70th
+    percentile, and their sum; reports in between are not used.
+  - `r-squared` (LASSO) — squared correlation between predicted and reported
+    scores (0–1).
+  - `auc` (LDA) — area under the ROC curve for separating high from low pain
+    (0.5 = chance, 1 = perfect separation).
+  - `coef` — model coefficients averaged over the cross-validation folds, one per
+    feature in the order of `P#_feature_names.xlsx`, stored as text.
+  - `p_values` — (number of null values greater than the observed value + 1) /
+    1001, using the 1,000 null values in the matching `_bootstrap_distribution.xlsx`.
+  - `sig_indices` — `True` when the observed value exceeds the 95th percentile of
+    that null.
+  - A blank `r-squared` or `auc` marks a window and scale with no fitted model.
+- `P#_lasso_bootstrap_distribution.xlsx`, `P#_lda_bootstrap_distribution.xlsx` —
+  the null distribution: 1,000 rows, one per random reshuffling of the pain
+  scores, by 20 columns (`0`–`19`), one per model in the row order of the matching
+  `_across_models.xlsx`. Values are R² (LASSO) or AUC (LDA). The file names say
+  "bootstrap", but the values come from reshuffling the scores, not from
+  resampling. A column is empty where that model was not fitted.
+- `P#_lasso_predicted_values_per_model.xlsx` — one row per pain report per model
+  (mood excluded): `predicted_values` (cross-validated prediction),
+  `ground_truth` (reported score: 0–10 for `nrs_s0`, 0–100 for the other scales)
+  and `model` (`<window>_<scale>`).
+- `P#_LDA_ROCs_per_model.xlsx` — the points of each model's ROC curve (mood
+  excluded): `FPR` (false-positive rate) and `TPR` (true-positive rate), both 0–1,
+  and `model`.
+- `P#_feature_names.xlsx` — a single column (`0`) listing the features in model
+  order, named `<contact>_<band>` (see Neural spectral features below).
+- `P#_electrode_labels.xlsx` — one row per recording contact: `elec_numbered`
+  (contact name, the prefix of the feature names) and `elec_anatomy` (brain
+  region; L/R = left/right).
+- `P#_inpatient_feature_counts.xlsx` — one row per recording contact, in the order
+  of `P#_electrode_labels.xlsx`:
   - `anatomy` — sensing region.
-  - `count_lda`, `count_lasso`, `count_combined` — number of selected decoding features from the linear-discriminant model, the LASSO model, and their combination.
+  - `count_lda`, `count_lasso` — how many times the contact ranked among the 10
+    largest or 10 smallest contact-averaged coefficients, summed over the
+    significant models for intensity, NRS, unpleasantness and relief;
+    `count_combined` is their sum.
 
 ### figure4_adaptive_dbs_performance.xlsx
 Adaptive-DBS performance traces for participant P3's left hemisphere (main
@@ -75,6 +123,18 @@ decoding inputs for the other participants are provided in a different form unde
 Supplementary Figures S8 and S4), not in this folder — so the absence of P2–P5
 files here is by design, not missing data. `P1_pain_decoding_AUC.xlsx` is written by
 `process_figure4_ambulatory_pain_decoding.ipynb` from the other two files.
+
+- `P1_pain_surveys.xlsx` — `time` (survey date and time, date-shifted as described
+  in the README de-identification note), `MPQ` (McGill Pain Questionnaire total,
+  0–45), `VAS` (pain-intensity visual analog scale, 0–100) and `in_analysis`
+  (`True` for the 1,050 surveys kept after outlier removal, `False` for the 153
+  removed).
+- `P1_neural_spectra.xlsx` — `surveys` is the row number; every other column is
+  named by its frequency in Hz (`0` to `99.5`, in 0.5 Hz steps) and holds power
+  at that frequency, in arbitrary units (a.u.).
+- `P1_pain_decoding_AUC.xlsx` — a single row labeled `AUC`; each column (`0` to
+  `99.5` Hz) is the cross-validated area under the ROC curve for the 5 Hz band
+  centered on that frequency (0.5 = chance, 1 = perfect separation).
 
 ### figureS6_battery_efficiency/ (CSV extracts)
 Device energy accounting for Figure S6. The Python script
@@ -140,6 +200,16 @@ Full device programming history per implanted hemisphere (feeds
 `plot_figureS11_programming_history.m`). Two per-hemisphere files and one
 per-participant file:
 - `<P><side>_stim_parameters.csv` — one row per settings interval: `datetime`, `activeGroup` (A–D; blank on the first row of P2L and of P2R, where therapy is off), `therapyStatus`, `is_adaptive` (closed-loop flag), `amplitude_mA`, `pulse_width_us`, `frequency_Hz`, `contacts`, `effectively_active`, `cathode`, `anode`, `polarity`, `lead`, `duty_prog` (programmed duty cycle).
+  Values: `therapyStatus` is 1 when therapy is on (the only value the analysis
+  code treats as stimulating) and 0 when it is off; 326 of the 18,880 rows carry
+  other device status codes (3 or 4), which the code treats as not stimulating. `is_adaptive`
+  and `effectively_active` are 0/1 flags. `polarity` is `monopolar`, `bipolar` or
+  `unknown` (the 237 rows with no contact record, where `lead` is blank). `lead`
+  names the implanted lead by side (R/L = right/left) and target: `Thal` or `THAL`
+  thalamus, `VPL` ventral posterolateral thalamus, `Caud` caudate, `ACC` anterior
+  cingulate cortex, `GPi` globus pallidus internus, `SGC` subgenual cingulate
+  cortex, `IFG` inferior frontal gyrus, `SFG` superior frontal gyrus. Dates are
+  date-shifted as described in the README de-identification note.
 - `<P><side>_daily_duty_cycle.csv` — `day`, `percentDutyCycle` (daily realized closed-loop duty cycle).
 - `<P>_sham_windows.csv` — `sham_start`, `sham_stop` (blinded sham-arm intervals
   for the participant). Present for P1, P2, P4 and P5. P3 did not undergo sham
@@ -173,7 +243,8 @@ other three files are its outputs.
 - `duty_cycle_group_tests.csv` — one row per statistic, testing whether the duty cycle separates responders from non-responders. `median_gap_percentage_points` and `permutation_p_one_sided`/`_two_sided` come from an exact permutation over all ten ways of splitting five participants three against two; `separation_is_complete` records whether every responder median fell below every non-responder median. `mixed_model_effect_percentage_points` and `mixed_model_standard_error` come from a day-level mixed model with a per-participant random intercept, reported with two p-values: `mixed_model_p_treating_days_as_independent` is what the software prints and is inflated, while `mixed_model_p_between_participants` uses degrees of freedom appropriate to a predictor that varies only between participants. `mixed_model_permutation_p_one_sided`/`_two_sided` refit that model under permuted participant labels. `intraclass_correlation` quantifies how much of the variance is between participants. `firth_odds_ratio_per_10_points` and `firth_p` come from penalized logistic regression, which is used because the groups do not overlap and ordinary logistic regression has no finite solution. `smallest_attainable_p_one_sided`/`_two_sided` state the floor imposed by the sample size.
 
 Responder status is read at run time from
-`figures/ExtendedDataTable2_all_pain_scales_closed_loop_vs_sham.csv`:
+`figures/ExtendedDataTable2_all_pain_scales_closed_loop_vs_sham.csv`, which
+`matlab_code/build_extended_data_table2.m` writes, so build that table first;
 a responder improved at least 30% from baseline during closed-loop on their own
 prospectively chosen index pain scale.
 
@@ -367,8 +438,8 @@ P3's recorded after therapy began is classified **washout**.
   run time.
 
 The Word version of these statistics, laid out as it appears in the article's
-supplement, is `figures/TableS11_extended_data_figure3_statistics.docx`
-(Supplementary Table S11).
+supplement, is written to `figures/TableS11_extended_data_figure3_statistics.docx`
+(Supplementary Table S11) by `python_code/export_tableS11_word.py`.
 
 ### Ambulatory biomarker features
 The per-survey ambulatory extracts for Figures S8 and S4 are documented under
@@ -399,11 +470,15 @@ One table per participant, in order: `TableS3_P1`, `TableS4_P2`, `TableS5_P3`,
 - `canonical_band` — canonical band name (theta/alpha/beta/…).
 - `closed_loop_use` — how the biomarker was used for closed-loop control.
 
-### Tables shipped outside this folder
+### Tables outside this folder
 - **Extended Data Table 2** (all pain scales, closed-loop versus sham) — `figures/ExtendedDataTable2_all_pain_scales_closed_loop_vs_sham.csv`, built by `matlab_code/build_extended_data_table2.m` from `data/extended_data_table2/blinded_window_pain_by_day.csv`, documented above; the formatted `.docx` beside it is rendered from that CSV by `python_code/export_extended_data_table2_word.py`. Columns: `participant`, `pain_scale`, `prospective_index_metric`, `baseline_median_iqr_n_days`, `closed_loop_median_iqr_n_days`, `closed_loop_percent_change_from_baseline`, `sham_median_iqr_n_days`, `sham_percent_change_from_baseline`, `responder_30pct_closed_loop`, `responder_50pct_closed_loop`. Every parenthetical count is a number of participant-days.
 - **Supplementary Table S10** (marginal battery drainage and break-even duty cycle) — no spreadsheet is shipped; the per-hemisphere source table is `data/figureS6_battery_efficiency/breakeven_duty.csv`, documented above.
-- **Supplementary Table S11** (full Extended Data Figure 3 statistics) — `figures/TableS11_extended_data_figure3_statistics.docx`, with the two source CSVs in `data/extended_figures_raw_pain/`.
-- **Extended Data Table 1** (closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations) — `figures/ExtendedDataTable1_closed_loop_algorithm_settings.docx` and `.csv`, with a rendered preview in `ExtendedDataTable1_preview.png`.
+- **Supplementary Table S11** (full Extended Data Figure 3 statistics) — written to `figures/TableS11_extended_data_figure3_statistics.docx` by `python_code/export_tableS11_word.py` from the two statistics CSVs in `data/extended_figures_raw_pain/`.
+- **Extended Data Table 1** (closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations) — `data/extended_data_table1/ExtendedDataTable1_closed_loop_algorithm_settings.csv`, one row per participant hemisphere:
+  - `participant`, `hemisphere`.
+  - Stimulation: `stim_target_contacts` (target region and contacts), `stim_mode` (`monopolar` or `bipolar`), `rate_hz` (pulse rate, Hz), `pulse_width_us` (µs), `amp_state0_mA` to `amp_state4_mA` (amplitude in each detector state, mA; blank where the state is not used) and `ramp_mA_per_s` (amplitude ramp rate, mA/s).
+  - Sensing, for each of two power bands (`band1_*`, `band2_*`): `channel` (sensing channel), `index` (power band on that channel), `region`, `contacts`, `range_hz` (frequency range) and `corr_pain`, `corr_stim`, `corr_sleep`, the sign of the band's correlation with pain, stimulation and sleep (↑ positive, ↓ negative, – none). The `band2_*` columns are blank where a second band is not used.
+  - Detectors, for each of two linear discriminants (`ld0_*`, `ld1_*`): `inputs` (the power bands the detector combines), `weight` (one per input), `threshold` (two values in brackets are a lower and an upper threshold), `update_rate`, `onset_dur` (how long the signal must stay above threshold before stimulation starts) and `term_dur` (how long it must stay below threshold before stimulation stops), as programmed on the device. The `ld1_*` columns are blank where the hemisphere uses one detector.
 - **Supplementary Table S12** (sensitivity analyses of the closed-loop versus sham model) — `figures/TableS12_sensitivity_analyses.csv`, written by `python_code/build_tableS12_sensitivity_analyses.py` from `data/figure5_double_blind_outcomes/cohort_daily_percent_change.csv`. Columns: `analysis`, `estimate_percent`, `standard_error`, `p_value`, `observations`, `closed_loop_days`, `sham_days`.
 - **Supplementary Table S1** and **Table 1** are not shipped.
 
@@ -414,7 +489,7 @@ One table per participant, in order: `TableS3_P1`, `TableS4_P2`, `TableS5_P3`,
 Ambulatory biomarker extracts live under `neural_data/ambulatory_stages123/`.
 Each file carries survey-locked spectra with pain scores attached (about 0.5 to
 1.5 MB each). The precomputed decoding results under
-`python_code/decoding_figures/decoding_results/` ship in full as well, so the
+`python_code/decoding_figures/decoding_results/` are included as well, so the
 decoding figures can be regenerated without re-fitting any model.
 
 ### `neural_data/ambulatory_stages123/`
@@ -424,7 +499,7 @@ device side (`{DEVICE_SIDE}_ambulatory_features.h5`), covering the ambulatory
 stages 1–3 of the trial.
 
 **HDF5 datasets**
-- `psd` — off-stimulation mean power spectral density, one row per pain survey × 200 frequency bins.
+- `psd` — off-stimulation mean power spectral density, one row per pain survey × 200 frequency bins, in arbitrary units (a.u.).
 - `frequency_hz` — the 200-point frequency axis (0–99.5 Hz at 0.5 Hz).
 - `pain_timestamp_unix` — survey timestamp (Unix seconds); `cluster_row` — index of the matched REDCap survey.
 - `pain_<scale>` — the pain score attached to each survey (`MPQtotal`, `mayoNRS`, `painVAS`, `unpleasantVAS`, `worstNRS`, `worstVAS`).

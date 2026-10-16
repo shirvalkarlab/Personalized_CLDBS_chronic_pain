@@ -104,15 +104,15 @@ decoding figures; it is not itself a numbered figure.
 ## EXTENDED DATA tables
 | ID | Title | Code / export | Data file |
 |---|---|---|---|
-| Ext Data Table 1 | Closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations | provided as data; the .csv is the authoritative copy and the .docx is a formatted rendering of it | figures/ExtendedDataTable1_closed_loop_algorithm_settings.csv, with .docx and ExtendedDataTable1_preview.png rendered from it |
+| Ext Data Table 1 | Closed-loop algorithm settings per hemisphere: stimulation parameters, sensing bands, detector thresholds and durations | provided as data | data/extended_data_table1/ExtendedDataTable1_closed_loop_algorithm_settings.csv |
 | Ext Data Table 2 | Pain outcomes on all scales, all participants (closed-loop vs sham) during the double-blinded crossover window: median [IQR] and percent change from baseline in participant-days, 30% / 50% responder flags, index-metric flag | MATLAB, matlab_code/build_extended_data_table2.m; Word copy from python_code/export_extended_data_table2_word.py | data/extended_data_table2/blinded_window_pain_by_day.csv |
 
 ## Shipped neural data
 - `neural_data/ambulatory_stages123/` — per-survey off-stimulation power spectral density extract for Figures S8 and S4, one HDF5 per implanted device side (9 files, ~8.5 MB total, 10,982 pain-survey spectra, spanning P1–P5). These ship as terminal data. `python_code/stability_and_closed_loop/extract_minimal_biomarker_features.py` (serial) or `extract_minimal_biomarker_features_parallel.py` (multi-core) documents how they were produced, and reads the continuous Summit recordings and pain-cluster spreadsheets, which are withheld as protected health information.
 - `neural_features/` — per-participant narrowband spectral features at four window lengths (1/5/10/30 min); the sole input to the pain-decoding pipeline (`python_code/decoding_figures/01_run_ml_pipeline.py`).
-- `python_code/decoding_figures/decoding_results/` — precomputed decoding results (185 files): each participant's model outputs and figures under `P1`–`P5/`, and the cross-participant summaries under `combined_results/`. These are what let scripts `03`, `05` and `06` run without re-fitting any model.
+- `python_code/decoding_figures/decoding_results/` — precomputed decoding results: each participant's model outputs under `P1`–`P5/`, and the cross-participant summaries under `combined_results/`. These are what let scripts `03`, `05` and `06` run without re-fitting any model.
 
 ## Notes on scope
-This deposit includes the figures and tables listed above. Final published figures involve substantial manual refinement by the authors in Adobe Illustrator (colour, panel arrangement, typography); the code here regenerates the underlying raw figures that are the starting point for that polishing.
+The code here regenerates the figures and tables listed above. Final published figures involve substantial manual refinement by the authors in Adobe Illustrator (colour, panel arrangement, typography); the code here regenerates the underlying raw figures that are the starting point for that polishing.
 
 `python_code/summarize_stimulation_parameters.py` writes `data/stimulation_parameter_summary/parameter_dispersion.csv` and `amplitude_time_trends.csv`; they support Supplementary Section S5 and are not numbered figures or tables.

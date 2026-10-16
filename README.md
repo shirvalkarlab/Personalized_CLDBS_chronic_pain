@@ -58,11 +58,10 @@ Extended Data Figure 1 is one of them.
 Figures are written into `figures/` as PDF; Figures 1, 5f, S5 and Extended
 Data Figures 2 and 3 also write PNG and SVG copies. The Figure S11 PDFs are
 600 dpi raster pages. The exceptions are Supplementary Figures S1, S2 and S3,
-which are written into `python_code/decoding_figures/decoding_results/` — that
-tree ships in full, so those panels can be inspected without running anything.
+which are written into `python_code/decoding_figures/decoding_results/`.
 Every other figure script, including those for S4 and S8, writes into
 `figures/`; the exploratory plots of the S8 script go to
-`python_code/stability_and_closed_loop/exploratory_output/`. Figure S8 ships as
+`python_code/stability_and_closed_loop/exploratory_output/`. Figure S8 is written as
 nine heatmaps, `FigureS8_<DEVICE_SIDE>.pdf`, one per implanted device side, and as
 the nine-panel `FigureS8_biomarker_stability.pdf` drawn by `plot_figureS8_composite.py`.
 
@@ -98,6 +97,36 @@ neural_features/        Per-participant narrowband spectral features at four
 figures/                Generated figures and tables
 docs/                   Figure inventory and data dictionary
 ```
+
+### Supporting code files
+
+Helper files are called by the figure scripts. Test files check the code against
+stored reference values; run them with `python -m unittest discover -s tests -v`
+from `python_code/`, and from `python_code/decoding_figures/` for the two decoding
+tests.
+
+| File | What it does | Used by |
+|---|---|---|
+| `matlab_code/helper/compute_analgesia_statistics.m` | Rank-sum test of each stimulated region against sham, with significance markers | `plot_figure2_inpatient_analgesia.m` |
+| `matlab_code/helper/condition_box_face.m` | Pale fill color for a stimulation condition's box | `draw_summary_box.m`, `plot_cohort_index_and_response_cdf.m` |
+| `matlab_code/helper/draw_summary_box.m` | Draws one box: interquartile range, median and whiskers | `plot_cohort_index_and_response_cdf.m` |
+| `matlab_code/helper/plot_cohort_index_and_response_cdf.m` | Draws Figure 5a–c, closed-loop versus sham | `plot_figure5_double_blind_outcomes.m` |
+| `matlab_code/helper/plot_stimulation_parameter_timeline.m` | Draws one participant's stimulation programming history | `plot_figureS11_programming_history.m` |
+| `matlab_code/helper/read_excel_sheets.m` | Reads every sheet of an Excel workbook into a structure of tables | `MAIN_wrapper.m`, `plot_figure2_inpatient_analgesia.m`, `plot_figure4_adaptive_dbs.m` |
+| `matlab_code/helper/set2_qualitative_colormap.m` | The ColorBrewer "Set2" color palette | `plot_figure4_adaptive_dbs.m` |
+| `matlab_code/helper/significance_stars.m` | Draws a bracket to the sham box and a significance marker | `compute_analgesia_statistics.m` |
+| `matlab_code/helper/stim_condition_colors.m` | The color for each stimulation condition | `condition_box_face.m`, `plot_cohort_index_and_response_cdf.m` |
+| `python_code/_ancillary_helpers.py` | Box-and-dot panels, p-value formatting, mixed-effects fits and responder counts for the questionnaire figures | `plot_figure5_ancillary_main.py`, `plot_extended_figure4_ancillary.py` |
+| `python_code/shared_utilities/utility/GraphingUtility.py` | General plotting functions (shaded error bars, violins, color bars, legends) | `plot_figure4abc_ambulatory_pain_decoding.ipynb`, `analyze_ambulatory_biomarker_stability.py`, `simulate_closed_loop_threshold_selection.py` |
+| `python_code/shared_utilities/utility/PythonUtility.py` | Small list-handling and search functions | `SignalProcessingUtility.py`, `analyze_ambulatory_biomarker_stability.py`, `simulate_closed_loop_threshold_selection.py` |
+| `python_code/shared_utilities/utility/SignalProcessingUtility.py` | Power spectra, filters, outlier removal and frequency-by-frequency decoding AUC; holds the `AUC_TRAINING_SET` setting | Both Figure 4 notebooks, the three biomarker scripts in `stability_and_closed_loop/` |
+| `python_code/shared_utilities/utility/figure3_inpatient_decoding_helpers.py` | Marks significant models against the null, counts the contacts with the largest coefficients, and draws Figure 3b–d | Both Figure 3 notebooks |
+| `python_code/tests/test_extended_figure4_steps.py` | Checks the Extended Data Figure 4d step-count test against the original analysis | — |
+| `python_code/tests/test_figureS8_composite.py` | Checks the panel order, titles and axis labels of the Figure S8 composite | — |
+| `python_code/tests/test_setup_environment.py` | Checks `setup_environment.py` without network access | — |
+| `python_code/tests/test_tableS12.py` | Checks Table S12 against MATLAB `fitlme` fits of the same model | — |
+| `python_code/decoding_figures/tests/test_binarize_labels.py` | Checks the low/high pain split (30th/70th percentile) behind the LDA models and Figure S2 | — |
+| `python_code/decoding_figures/tests/test_permutation_null.py` | Checks the fast null-distribution calculation against scikit-learn | — |
 
 ---
 
