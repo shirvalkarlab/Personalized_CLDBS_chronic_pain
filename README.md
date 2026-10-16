@@ -22,6 +22,8 @@ Clinical trial registration: NCT04144972.
 
 Data package DOI: [10.5061/dryad.b2rbnzsvr](https://doi.org/10.5061/dryad.b2rbnzsvr)
 (Dryad; forthcoming).
+On Dryad, this repository is distributed as the single archive
+`Shirvalkar_sEEGCLDBS_2026.zip`.
 
 ---
 
